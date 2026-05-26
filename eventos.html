@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Eventos</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="./assets/images/logo.png"
+  >
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- HEADER -->
+  <header class="bg-black text-white p-4 shadow-lg">
+
+    <div class="container mx-auto flex justify-between items-center">
+
+      <div class="flex items-center gap-3">
+
+        <img
+          src="./assets/images/logo.png"
+          alt="Logo Remigio Eventos"
+          class="w-12 h-12 rounded-full object-cover"
+        >
+
+        <h1 class="font-bold text-xl">
+          Remigio Eventos
+        </h1>
+
+      </div>
+
+      <a
+        href="index.html"
+        class="hover:text-blue-400 transition"
+      >
+        Voltar
+      </a>
+
+    </div>
+
+  </header>
+
+  <!-- MAIN -->
+  <main class="container mx-auto py-12 px-6">
+
+    <h2 class="text-4xl font-bold mb-10">
+      Próximos Eventos
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <!-- CARD -->
+      <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition duration-300">
+
+        <img
+          src="https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop"
+          alt="Tech Summit 2026"
+          class="w-full h-56 object-cover"
+        >
+
+        <div class="p-6">
+
+          <h3 class="text-2xl font-bold mb-2">
+            Tech Summit 2026
+          </h3>
+
+          <p class="mb-2 text-gray-600">
+            📍 Centro de Convenções de Maceió
+          </p>
+
+          <p class="mb-6 text-gray-600">
+            📅 15 de Agosto de 2026
+          </p>
+
+          <a
+            href="tech-summit.html"
+            class="inline-block bg-blue-600 hover:bg-blue-700 transition text-white px-5 py-3 rounded-lg font-semibold"
+          >
+            Saiba Mais
+          </a>
+
+        </div>
+
+      </article>
+
+    </div>
+
+  </main>
+
+</body>
+</html>

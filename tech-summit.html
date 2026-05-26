@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Tech Summit 2026</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="./assets/images/logo.png"
+  >
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- HEADER -->
+  <header class="bg-black text-white p-4 shadow-lg">
+
+    <div class="container mx-auto flex justify-between items-center">
+
+      <div class="flex items-center gap-3">
+
+        <img
+          src="./assets/images/logo.png"
+          alt="Logo"
+          class="w-12 h-12 rounded-full"
+        >
+
+        <h1 class="font-bold text-xl">
+          Remigio Eventos
+        </h1>
+
+      </div>
+
+      <a
+        href="eventos.html"
+        class="hover:text-blue-400 transition"
+      >
+        Voltar
+      </a>
+
+    </div>
+
+  </header>
+
+  <!-- MAIN -->
+  <main class="container mx-auto py-10 px-6">
+
+    <!-- IMAGEM -->
+    <img
+      src="https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop"
+      alt="Tech Summit"
+      class="w-full h-80 object-cover rounded-xl mb-8"
+    >
+
+    <!-- CONTEÚDO -->
+    <section class="bg-white p-8 rounded-xl shadow-lg">
+
+      <h2 class="text-4xl font-bold mb-4">
+        Tech Summit 2026
+      </h2>
+
+      <p class="mb-4 text-lg">
+        📍 Centro de Convenções de Maceió
+      </p>
+
+      <p class="mb-6 text-lg">
+        📅 15 de Agosto de 2026
+      </p>
+
+      <p class="mb-8 text-lg leading-relaxed">
+
+        Evento voltado para tecnologia,
+        inovação, desenvolvimento de software,
+        inteligência artificial e empreendedorismo digital.
+
+      </p>
+
+      <!-- TABELA -->
+      <h3 class="text-3xl font-bold mb-4">
+        Categorias de Ingresso
+      </h3>
+
+      <div class="overflow-x-auto mb-10">
+
+        <table class="w-full border border-gray-300">
+
+          <tr class="bg-gray-200">
+
+            <th class="border p-3">
+              Categoria
+            </th>
+
+            <th class="border p-3">
+              Benefícios
+            </th>
+
+            <th class="border p-3">
+              Valor
+            </th>
+
+          </tr>
+
+          <tr>
+
+            <td class="border p-3">
+              Padrão
+            </td>
+
+            <td class="border p-3">
+              Acesso ao evento
+            </td>
+
+            <td class="border p-3">
+              R$ 80,00
+            </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="border p-3">
+              VIP
+            </td>
+
+            <td class="border p-3">
+              Área VIP + Brindes
+            </td>
+
+            <td class="border p-3">
+              R$ 180,00
+            </td>
+
+          </tr>
+
+          <tr>
+
+            <td class="border p-3">
+              Premium
+            </td>
+
+            <td class="border p-3">
+              Meet & Greet + Kit Exclusivo
+            </td>
+
+            <td class="border p-3">
+              R$ 350,00
+            </td>
+
+          </tr>
+
+        </table>
+
+      </div>
+
+      <!-- FORMULÁRIO -->
+      <h3 class="text-3xl font-bold mb-6">
+        Inscrição
+      </h3>
+
+      <form class="space-y-5">
+
+        <!-- NOME -->
+        <div>
+
+          <label
+            for="nome"
+            class="block mb-2 font-semibold"
+          >
+            Nome
+            <span class="text-red-600">*</span>
+          </label>
+
+          <input
+            type="text"
+            id="nome"
+            required
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+
+        </div>
+
+        <!-- EMAIL -->
+        <div>
+
+          <label
+            for="email"
+            class="block mb-2 font-semibold"
+          >
+            Email
+            <span class="text-red-600">*</span>
+          </label>
+
+          <input
+            type="email"
+            id="email"
+            required
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+
+        </div>
+
+        <!-- TELEFONE -->
+        <div>
+
+          <label
+            for="telefone"
+            class="block mb-2 font-semibold"
+          >
+            Telefone
+          </label>
+
+          <input
+            type="tel"
+            id="telefone"
+            placeholder="(82) 99999-9999"
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+
+        </div>
+
+        <!-- CATEGORIA -->
+        <div>
+
+          <label
+            for="categoria"
+            class="block mb-2 font-semibold"
+          >
+            Categoria de Ingresso
+          </label>
+
+          <select
+            id="categoria"
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+
+            <option>
+              Padrão
+            </option>
+
+            <option>
+              VIP
+            </option>
+
+            <option>
+              Premium
+            </option>
+
+          </select>
+
+        </div>
+
+        <!-- TERMOS -->
+        <div class="flex items-start gap-3">
+
+          <input
+            type="checkbox"
+            required
+            class="mt-1"
+          >
+
+          <p class="text-sm leading-relaxed">
+
+            Declaro estar ciente e de acordo com os
+
+            <a
+              href="termos.html"
+              target="_blank"
+              class="text-blue-600 underline hover:text-blue-800 transition"
+            >
+              termos de uso e política de privacidade
+            </a>
+
+          </p>
+
+        </div>
+
+        <!-- BOTÃO -->
+        <button
+          type="submit"
+          class="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-lg font-semibold"
+        >
+          Realizar Inscrição
+        </button>
+
+      </form>
+
+    </section>
+
+  </main>
+
+</body>
+</html>

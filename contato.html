@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Contato</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="./assets/images/logo.png"
+  >
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- HEADER -->
+  <header class="bg-black text-white p-4 shadow-lg">
+
+    <div class="container mx-auto flex justify-between items-center">
+
+      <div class="flex items-center gap-3">
+
+        <img
+          src="./assets/images/logo.png"
+          alt="Logo Remigio Eventos"
+          class="w-12 h-12 rounded-full object-cover"
+        >
+
+        <h1 class="font-bold text-xl">
+          Remigio Eventos
+        </h1>
+
+      </div>
+
+      <a
+        href="index.html"
+        class="hover:text-blue-400 transition"
+      >
+        Voltar
+      </a>
+
+    </div>
+
+  </header>
+
+  <!-- MAIN -->
+  <main class="container mx-auto py-16 px-6">
+
+    <section class="bg-white p-8 rounded-xl shadow-lg max-w-2xl mx-auto">
+
+      <h2 class="text-4xl font-bold mb-6">
+        Contato
+      </h2>
+
+      <p class="mb-2 text-lg">
+        📧 remigio.pedro@gmail.com
+      </p>
+
+      <p class="mb-8 text-lg">
+        📱 (82) 99655-8114
+      </p>
+
+      <!-- FORM -->
+      <form
+        id="form-contato"
+        class="space-y-5"
+      >
+
+        <!-- NOME -->
+        <div>
+
+          <label
+            for="nome"
+            class="block mb-2 font-semibold"
+          >
+            Nome
+            <span class="text-red-600">*</span>
+          </label>
+
+          <input
+            type="text"
+            id="nome"
+            required
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+
+        </div>
+
+        <!-- EMAIL -->
+        <div>
+
+          <label
+            for="email"
+            class="block mb-2 font-semibold"
+          >
+            Email
+            <span class="text-red-600">*</span>
+          </label>
+
+          <input
+            type="email"
+            id="email"
+            required
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+
+        </div>
+
+        <!-- EVENTO -->
+        <div>
+
+          <label
+            for="evento"
+            class="block mb-2 font-semibold"
+          >
+            Evento
+          </label>
+
+          <input
+            type="text"
+            id="evento"
+            placeholder="Ex: Tech Summit 2026"
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+
+        </div>
+
+        <!-- MENSAGEM -->
+        <div>
+
+          <label
+            for="mensagem"
+            class="block mb-2 font-semibold"
+          >
+            Mensagem
+          </label>
+
+          <textarea
+            id="mensagem"
+            rows="5"
+            required
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          ></textarea>
+
+        </div>
+
+        <!-- BOTÃO -->
+        <button
+          type="submit"
+          class="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-lg font-semibold w-full md:w-auto"
+        >
+          Enviar Mensagem
+        </button>
+
+      </form>
+
+      <!-- FEEDBACK -->
+      <p
+        id="mensagem-sucesso"
+        class="hidden text-green-600 mt-6 font-bold"
+      >
+        Mensagem enviada com sucesso!
+      </p>
+
+    </section>
+
+  </main>
+
+  <script src="./js/main.js"></script>
+
+</body>
+</html>
