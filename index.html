@@ -89,7 +89,7 @@
       <!-- BOTÃO MOBILE -->
       <button
         id="menu-button"
-        class="md:hidden text-3xl"
+        class="md:hidden bg-gray-900 hover:bg-blue-600 transition px-4 py-2 rounded-lg text-2xl shadow-lg"
       >
         ☰
       </button>
@@ -99,24 +99,44 @@
     <!-- MENU MOBILE -->
     <div
       id="mobile-menu"
-      class="hidden flex-col bg-black px-6 pb-6 md:hidden"
+      class="hidden md:hidden bg-black px-5 pb-6 pt-2 shadow-2xl"
     >
 
-      <a href="index.html" class="py-2 hover:text-blue-400">
-        Home
-      </a>
+      <div class="flex flex-col gap-4">
 
-      <a href="quem-somos.html" class="py-2 hover:text-blue-400">
-        Quem Somos
-      </a>
+        <!-- HOME -->
+        <a
+          href="index.html"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          🏠 Home
+        </a>
 
-      <a href="eventos.html" class="py-2 hover:text-blue-400">
-        Eventos
-      </a>
+        <!-- QUEM SOMOS -->
+        <a
+          href="quem-somos.html"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          👥 Quem Somos
+        </a>
 
-      <a href="contato.html" class="py-2 hover:text-blue-400">
-        Contato
-      </a>
+        <!-- EVENTOS -->
+        <a
+          href="eventos.html"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          🎟️ Eventos
+        </a>
+
+        <!-- CONTATO -->
+        <a
+          href="contato.html"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          📞 Contato
+        </a>
+
+      </div>
 
     </div>
 
@@ -193,78 +213,78 @@
   </main>
 
   <!-- FOOTER -->
-<footer class="bg-black text-white py-10 px-6">
+  <footer class="bg-black text-white py-10 px-6">
 
-  <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
+    <div class="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10">
 
-    <!-- EMPRESA -->
-    <div>
+      <!-- EMPRESA -->
+      <div>
 
-      <h3 class="text-2xl font-bold mb-4">
-        Remigio Eventos e Serviços
-      </h3>
+        <h3 class="text-2xl font-bold mb-4">
+          Remigio Eventos e Serviços
+        </h3>
 
-      <p class="mb-2">
-        © 2026 Remigio Eventos e Serviços.
-        Todos os direitos reservados.
-      </p>
+        <p class="mb-2">
+          © 2026 Remigio Eventos e Serviços.
+          Todos os direitos reservados.
+        </p>
 
-      <p class="mb-2">
-        CNPJ: 48.374.563/0001-76
-      </p>
+        <p class="mb-2">
+          CNPJ: 48.374.563/0001-76
+        </p>
 
-      <p class="mb-2">
-        Rua Paulo Lobo Assumpção, 153,
-        Serraria, Maceió/AL,
-        CEP 57043-803
-      </p>
+        <p class="mb-2">
+          Rua Paulo Lobo Assumpção, 153,
+          Serraria, Maceió/AL,
+          CEP 57043-803
+        </p>
 
-      <p class="mb-2">
-        Atendimento:
-        Seg-Sex, 08h às 18h
-      </p>
+        <p class="mb-2">
+          Atendimento:
+          Seg-Sex, 08h às 18h
+        </p>
+
+      </div>
+
+      <!-- LGPD -->
+      <div>
+
+        <h3 class="text-2xl font-bold mb-4">
+          Privacidade e Segurança
+        </h3>
+
+        <p class="mb-4 leading-relaxed text-gray-300">
+
+          Os dados tratados neste site são armazenados
+          com segurança e utilizados exclusivamente
+          para comunicação, inscrições e atendimento.
+
+          A Remigio Eventos e Serviços atua em conformidade
+          com a Lei Geral de Proteção de Dados (LGPD),
+          garantindo sigilo e proteção das informações.
+
+        </p>
+
+        <!-- INSTAGRAM -->
+        <a
+          href="https://www.instagram.com/pedroremigio1/"
+          target="_blank"
+          class="inline-flex items-center gap-2 text-pink-400 hover:text-pink-500 transition"
+        >
+
+          <span class="text-2xl">
+            📸
+          </span>
+
+          Instagram
+
+        </a>
+
+      </div>
 
     </div>
 
-    <!-- LGPD -->
-    <div>
-
-      <h3 class="text-2xl font-bold mb-4">
-        Privacidade e Segurança
-      </h3>
-
-      <p class="mb-4 leading-relaxed text-gray-300">
-
-        Os dados tratados neste site são armazenados
-        com segurança e utilizados exclusivamente
-        para comunicação, inscrições e atendimento.
-
-        A Remigio Eventos e Serviços atua em conformidade
-        com a Lei Geral de Proteção de Dados (LGPD),
-        garantindo sigilo e proteção das informações.
-
-      </p>
-
-      <!-- INSTAGRAM -->
-      <a
-        href="https://www.instagram.com/pedroremigio1/"
-        target="_blank"
-        class="inline-flex items-center gap-2 text-pink-400 hover:text-pink-500 transition"
-      >
-
-        <span class="text-2xl">
-          📸
-        </span>
-
-        Instagram
-
-      </a>
-
-    </div>
-
-  </div>
-
-</footer>
+  </footer>
 
   <script src="./js/main.js"></script>
 
