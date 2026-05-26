@@ -24,10 +24,12 @@
 <body class="bg-gray-100 text-gray-800">
 
   <!-- HEADER -->
-  <header class="bg-black text-white p-4 shadow-lg">
+  <header class="bg-black text-white fixed top-0 w-full z-50 shadow-lg">
 
-    <div class="container mx-auto flex justify-between items-center">
+    <!-- MENU PRINCIPAL -->
+    <nav class="container mx-auto flex items-center justify-between p-4">
 
+      <!-- LOGO -->
       <div class="flex items-center gap-3">
 
         <img
@@ -42,11 +44,105 @@
 
       </div>
 
+      <!-- MENU DESKTOP -->
+      <ul class="hidden md:flex gap-6">
+
+        <li>
+          <a
+            href="index.html"
+            class="hover:text-blue-400 transition"
+          >
+            Home
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="quem-somos.html"
+            class="hover:text-blue-400 transition"
+          >
+            Quem Somos
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="eventos.html"
+            class="hover:text-blue-400 transition"
+          >
+            Eventos
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="contato.html"
+            class="hover:text-blue-400 transition"
+          >
+            Contato
+          </a>
+        </li>
+
+      </ul>
+
+      <!-- BOTÃO MOBILE -->
+      <button
+        id="menu-button"
+        class="md:hidden bg-gray-900 hover:bg-blue-600 transition px-4 py-2 rounded-lg text-2xl shadow-lg"
+      >
+        ☰
+      </button>
+
+    </nav>
+
+    <!-- MENU MOBILE -->
+    <div
+      id="mobile-menu"
+      class="hidden md:hidden bg-black px-5 pb-6 pt-2 shadow-2xl"
+    >
+
+      <div class="flex flex-col gap-4">
+
+        <a
+          href="index.html"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          🏠 Home
+        </a>
+
+        <a
+          href="quem-somos.html"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          👥 Quem Somos
+        </a>
+
+        <a
+          href="eventos.html"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          🎟️ Eventos
+        </a>
+
+        <a
+          href="contato.html"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          📞 Contato
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- VOLTAR -->
+    <div class="bg-gray-900 px-6 py-3 flex justify-end">
+
       <a
         href="index.html"
-        class="hover:text-blue-400 transition"
+        class="bg-black hover:bg-blue-600 transition px-4 py-2 rounded-lg shadow-lg"
       >
-        Voltar
+        ← Voltar
       </a>
 
     </div>
@@ -54,34 +150,166 @@
   </header>
 
   <!-- MAIN -->
-  <main class="container mx-auto py-16 px-6">
+  <main class="container mx-auto pt-44 pb-16 px-6">
 
-    <section class="bg-white p-10 rounded-xl shadow-lg max-w-4xl mx-auto">
+    <section class="bg-white p-10 rounded-2xl shadow-xl max-w-5xl mx-auto">
 
-      <h2 class="text-4xl font-bold mb-8">
-        Quem Somos
-      </h2>
+      <!-- TÍTULO -->
+      <div class="text-center mb-12">
 
-      <p class="mb-6 text-lg leading-relaxed">
-        A Remigio Eventos e Serviços é uma empresa especializada
-        na organização de eventos corporativos, culturais,
-        tecnológicos e experiências imersivas.
-      </p>
+        <h2 class="text-4xl md:text-5xl font-bold mb-4">
+          Quem Somos
+        </h2>
 
-      <p class="mb-6 text-lg leading-relaxed">
-        Nosso objetivo é transformar ideias em experiências
-        inesquecíveis através de planejamento estratégico,
-        inovação e excelência no atendimento.
-      </p>
+        <p class="text-lg text-gray-600 max-w-3xl mx-auto">
 
-      <p class="text-lg leading-relaxed">
-        Atuamos com foco em qualidade, organização e experiências
-        únicas para públicos de todos os tamanhos.
-      </p>
+          Transformando eventos em experiências memoráveis
+          através de inovação, organização e excelência.
+
+        </p>
+
+      </div>
+
+      <!-- IMAGEM -->
+      <img
+        src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=1200&auto=format&fit=crop"
+        alt="Equipe organizando evento"
+        class="w-full h-80 object-cover rounded-2xl mb-10"
+      >
+
+      <!-- CONTEÚDO -->
+      <div class="space-y-8 text-lg leading-relaxed">
+
+        <p>
+
+          A
+          <strong>
+            Remigio Eventos e Serviços
+          </strong>
+          é uma empresa especializada na criação,
+          planejamento e execução de eventos corporativos,
+          culturais, tecnológicos e experiências imersivas.
+
+        </p>
+
+        <p>
+
+          Nossa missão é conectar pessoas através de
+          experiências únicas, oferecendo eventos
+          modernos, organizados e memoráveis para
+          públicos de diferentes segmentos.
+
+        </p>
+
+        <p>
+
+          Trabalhamos com foco em qualidade,
+          inovação, segurança, conforto e
+          excelência no atendimento, buscando
+          sempre entregar projetos que superem
+          as expectativas dos participantes
+          e parceiros.
+
+        </p>
+
+        <p>
+
+          Ao longo dos anos, realizamos eventos
+          voltados para cultura pop, tecnologia,
+          games, empreendedorismo e entretenimento,
+          sempre priorizando experiências imersivas
+          e ambientes preparados para todos os públicos.
+
+        </p>
+
+      </div>
+
+      <!-- CARDS -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+
+        <!-- CARD -->
+        <div class="bg-gray-100 rounded-2xl p-6 shadow-md">
+
+          <div class="text-4xl mb-4">
+            🎯
+          </div>
+
+          <h3 class="text-2xl font-bold mb-3">
+            Missão
+          </h3>
+
+          <p class="text-gray-700 leading-relaxed">
+
+            Criar eventos organizados, modernos
+            e impactantes que proporcionem
+            experiências inesquecíveis.
+
+          </p>
+
+        </div>
+
+        <!-- CARD -->
+        <div class="bg-gray-100 rounded-2xl p-6 shadow-md">
+
+          <div class="text-4xl mb-4">
+            🚀
+          </div>
+
+          <h3 class="text-2xl font-bold mb-3">
+            Visão
+          </h3>
+
+          <p class="text-gray-700 leading-relaxed">
+
+            Ser referência regional na realização
+            de eventos tecnológicos, culturais
+            e corporativos.
+
+          </p>
+
+        </div>
+
+        <!-- CARD -->
+        <div class="bg-gray-100 rounded-2xl p-6 shadow-md">
+
+          <div class="text-4xl mb-4">
+            🤝
+          </div>
+
+          <h3 class="text-2xl font-bold mb-3">
+            Valores
+          </h3>
+
+          <p class="text-gray-700 leading-relaxed">
+
+            Ética, inovação, responsabilidade,
+            organização e compromisso com
+            a experiência do público.
+
+          </p>
+
+        </div>
+
+      </div>
 
     </section>
 
   </main>
+
+  <script>
+
+    // MENU MOBILE
+    const menuButton = document.getElementById("menu-button");
+
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    menuButton.addEventListener("click", () => {
+
+      mobileMenu.classList.toggle("hidden");
+
+    });
+
+  </script>
 
 </body>
 </html>

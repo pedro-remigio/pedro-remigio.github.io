@@ -23,16 +23,19 @@
 
 <body class="bg-gray-100 text-gray-800">
 
-  <header class="bg-black text-white p-4 shadow-lg">
+  <!-- HEADER -->
+  <header class="bg-black text-white fixed top-0 w-full z-50 shadow-lg">
 
-    <div class="container mx-auto flex justify-between items-center">
+    <!-- MENU PRINCIPAL -->
+    <nav class="container mx-auto flex items-center justify-between p-4">
 
+      <!-- LOGO -->
       <div class="flex items-center gap-3">
 
         <img
           src="./assets/images/logo.png"
           alt="Logo"
-          class="w-12 h-12 rounded-full"
+          class="w-12 h-12 rounded-full object-cover"
         >
 
         <h1 class="font-bold text-xl">
@@ -41,45 +44,327 @@
 
       </div>
 
-      <a href="index.html" class="hover:text-blue-400">
-        Voltar
+      <!-- MENU DESKTOP -->
+      <ul class="hidden md:flex gap-6">
+
+        <li>
+          <a
+            href="index.html"
+            class="hover:text-blue-400 transition"
+          >
+            Home
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="quem-somos.html"
+            class="hover:text-blue-400 transition"
+          >
+            Quem Somos
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="eventos.html"
+            class="hover:text-blue-400 transition"
+          >
+            Eventos
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="contato.html"
+            class="hover:text-blue-400 transition"
+          >
+            Contato
+          </a>
+        </li>
+
+      </ul>
+
+      <!-- BOTÃO MOBILE -->
+      <button
+        id="menu-button"
+        class="md:hidden bg-gray-900 hover:bg-pink-600 transition px-4 py-2 rounded-lg text-2xl shadow-lg"
+      >
+        ☰
+      </button>
+
+    </nav>
+
+    <!-- MENU MOBILE -->
+    <div
+      id="mobile-menu"
+      class="hidden md:hidden bg-black px-5 pb-6 pt-2 shadow-2xl"
+    >
+
+      <div class="flex flex-col gap-4">
+
+        <a
+          href="index.html"
+          class="bg-gray-900 hover:bg-pink-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          🏠 Home
+        </a>
+
+        <a
+          href="quem-somos.html"
+          class="bg-gray-900 hover:bg-pink-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          👥 Quem Somos
+        </a>
+
+        <a
+          href="eventos.html"
+          class="bg-gray-900 hover:bg-pink-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          🎟️ Eventos
+        </a>
+
+        <a
+          href="contato.html"
+          class="bg-gray-900 hover:bg-pink-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          📞 Contato
+        </a>
+
+      </div>
+
+    </div>
+
+    <!-- VOLTAR -->
+    <div class="bg-gray-900 px-6 py-3 flex justify-end">
+
+      <a
+        href="index.html"
+        class="bg-black hover:bg-pink-600 transition px-4 py-2 rounded-lg shadow-lg"
+      >
+        ← Voltar
       </a>
 
     </div>
 
   </header>
 
-  <main class="container mx-auto py-10 px-6">
+  <!-- MAIN -->
+  <main class="container mx-auto pt-44 pb-16 px-6">
 
-    <img
-      src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop"
-      alt="SuperCon"
-      class="w-full h-80 object-cover rounded-xl mb-8"
-    >
+    <!-- HERO -->
+    <section class="relative rounded-3xl overflow-hidden shadow-2xl mb-12">
 
-    <section class="bg-white p-8 rounded-xl shadow-lg">
+      <img
+        src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1400&auto=format&fit=crop"
+        alt="Evento anime"
+        class="w-full h-[500px] object-cover"
+      >
 
-      <h2 class="text-4xl font-bold mb-4">
-        SuperCon Maceió
-      </h2>
+      <div class="absolute inset-0 bg-black/60 flex items-center">
 
-      <p class="mb-4 text-lg">
-        📍 Centro de Convenções de Maceió
-      </p>
+        <div class="p-8 md:p-16 text-white max-w-3xl">
 
-      <p class="mb-6 text-lg">
-        📅 23, 24 e 25 de Junho de 2023
-      </p>
+          <h2 class="text-4xl md:text-6xl font-bold mb-6">
+            SuperCon Maceió
+          </h2>
 
-      <p class="mb-8 text-lg leading-relaxed">
-        A SuperCon Maceió reuniu fãs de anime,
-        cultura pop, cosplay e games em um dos maiores
-        eventos geek do Nordeste.
-      </p>
+          <p class="text-xl leading-relaxed mb-6">
+
+            O maior evento geek e de cultura pop
+            realizado em Maceió, reunindo fãs de anime,
+            cosplay, games, K-pop, tecnologia e entretenimento.
+
+          </p>
+
+          <div class="flex flex-col md:flex-row gap-4 text-lg">
+
+            <span class="bg-pink-600 px-5 py-3 rounded-xl shadow-lg">
+              📅 23, 24 e 25 de Junho de 2023
+            </span>
+
+            <span class="bg-purple-700 px-5 py-3 rounded-xl shadow-lg">
+              📍 Centro de Convenções de Maceió
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- SOBRE -->
+    <section class="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-12">
+
+      <h3 class="text-3xl font-bold mb-8">
+        Sobre o Evento
+      </h3>
+
+      <div class="space-y-6 text-lg leading-relaxed">
+
+        <p>
+
+          A
+          <strong>
+            SuperCon Maceió
+          </strong>
+          foi criada com o objetivo de unir fãs da cultura geek
+          em uma experiência completa de entretenimento e imersão.
+
+        </p>
+
+        <p>
+
+          Durante os três dias de evento, o público participou
+          de concursos de cosplay, campeonatos de games,
+          apresentações de K-pop, áreas temáticas,
+          lojas geek, painéis interativos e encontros
+          com criadores de conteúdo.
+
+        </p>
+
+        <p>
+
+          O evento contou com milhares de participantes,
+          transformando o Centro de Convenções de Maceió
+          em um grande espaço dedicado à criatividade,
+          diversão e comunidade.
+
+        </p>
+
+      </div>
+
+    </section>
+
+    <!-- GALERIA -->
+    <section class="mb-12">
+
+      <h3 class="text-3xl font-bold mb-8">
+        Registros do Evento
+      </h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- FOTO -->
+        <div class="overflow-hidden rounded-2xl shadow-lg">
+
+          <img
+            src="./assets/images/cosplay.png"
+            alt="Cosplayers no evento"
+            class="w-full h-72 object-cover hover:scale-110 transition duration-500"
+          >
+
+        </div>
+
+        <!-- FOTO -->
+        <div class="overflow-hidden rounded-2xl shadow-lg">
+
+          <img
+            src="./assets/images/gamers.png"
+            alt="Área gamer"
+            class="w-full h-72 object-cover hover:scale-110 transition duration-500"
+          >
+
+        </div>
+
+        <!-- FOTO -->
+        <div class="overflow-hidden rounded-2xl shadow-lg">
+
+          <img
+            src="./assets/images/palco.png"
+            alt="Palco principal"
+            class="w-full h-72 object-cover hover:scale-110 transition duration-500"
+          >
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- DESTAQUES -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- CARD -->
+      <div class="bg-white p-8 rounded-2xl shadow-lg">
+
+        <div class="text-5xl mb-4">
+          🎭
+        </div>
+
+        <h3 class="text-2xl font-bold mb-4">
+          Concurso Cosplay
+        </h3>
+
+        <p class="text-lg leading-relaxed text-gray-700">
+
+          Participantes caracterizados como personagens
+          famosos disputaram apresentações e premiações.
+
+        </p>
+
+      </div>
+
+      <!-- CARD -->
+      <div class="bg-white p-8 rounded-2xl shadow-lg">
+
+        <div class="text-5xl mb-4">
+          🎮
+        </div>
+
+        <h3 class="text-2xl font-bold mb-4">
+          Área Gamer
+        </h3>
+
+        <p class="text-lg leading-relaxed text-gray-700">
+
+          Campeonatos, consoles, jogos multiplayer
+          e experiências imersivas para o público.
+
+        </p>
+
+      </div>
+
+      <!-- CARD -->
+      <div class="bg-white p-8 rounded-2xl shadow-lg">
+
+        <div class="text-5xl mb-4">
+          🎤
+        </div>
+
+        <h3 class="text-2xl font-bold mb-4">
+          Palco Principal
+        </h3>
+
+        <p class="text-lg leading-relaxed text-gray-700">
+
+          Apresentações musicais, concursos,
+          convidados especiais e atrações temáticas.
+
+        </p>
+
+      </div>
 
     </section>
 
   </main>
+
+  <script>
+
+    // MENU MOBILE
+    const menuButton = document.getElementById("menu-button");
+
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    menuButton.addEventListener("click", () => {
+
+      mobileMenu.classList.toggle("hidden");
+
+    });
+
+  </script>
 
 </body>
 </html>
