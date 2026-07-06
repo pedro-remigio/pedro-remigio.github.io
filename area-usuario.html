@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Área do Usuário</title>
+
+  <link
+    rel="icon"
+    type="image/png"
+    href="./assets/images/logo.png"
+  >
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- HEADER -->
+  <header class="bg-black text-white fixed top-0 w-full z-50 shadow-lg">
+
+    <!-- MENU PRINCIPAL -->
+    <nav class="container mx-auto flex items-center justify-between p-4">
+
+      <!-- LOGO -->
+      <div class="flex items-center gap-3">
+
+        <img
+          src="./assets/images/logo.png"
+          alt="Logo Remigio Eventos"
+          class="w-12 h-12 rounded-full object-cover"
+        >
+
+        <h1 class="font-bold text-xl">
+          Remigio Eventos
+        </h1>
+
+      </div>
+
+      <!-- MENU DESKTOP -->
+      <ul class="hidden md:flex gap-6">
+
+        <li>
+          <a
+            href="index.html"
+            class="hover:text-blue-400 transition"
+          >
+            Home
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="eventos.html"
+            class="hover:text-blue-400 transition"
+          >
+            Eventos
+          </a>
+        </li>
+
+        <li>
+          <a
+            href="#"
+            id="link-sair"
+            class="hover:text-blue-400 transition"
+          >
+            Sair
+          </a>
+        </li>
+
+      </ul>
+
+      <!-- BOTÃO MOBILE -->
+      <button
+        id="menu-button"
+        class="md:hidden bg-gray-900 hover:bg-blue-600 transition px-4 py-2 rounded-lg text-2xl shadow-lg"
+      >
+        ☰
+      </button>
+
+    </nav>
+
+    <!-- MENU MOBILE -->
+    <div
+      id="mobile-menu"
+      class="hidden md:hidden bg-black px-5 pb-6 pt-2 shadow-2xl"
+    >
+
+      <div class="flex flex-col gap-4">
+
+        <a
+          href="index.html"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          🏠 Home
+        </a>
+
+        <a
+          href="eventos.html"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          🎟️ Eventos
+        </a>
+
+        <a
+          href="#"
+          id="link-sair-mobile"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          🚪 Sair
+        </a>
+
+      </div>
+
+    </div>
+
+  </header>
+
+  <!-- MAIN -->
+  <main class="container mx-auto pt-44 pb-16 px-6">
+
+    <section class="bg-white p-8 rounded-xl shadow-lg max-w-3xl mx-auto">
+
+      <h2 class="text-4xl font-bold mb-2">
+        Área do Usuário
+      </h2>
+
+      <p id="saudacao" class="text-lg text-gray-600 mb-8">
+        Olá!
+      </p>
+
+      <!-- EVENTOS INSCRITOS -->
+      <div class="mb-8">
+
+        <h3 class="text-2xl font-bold mb-4">
+          Meus Eventos
+        </h3>
+
+        <p class="bg-gray-100 rounded-lg p-4 text-gray-700">
+          Você não está inscrito em nenhum evento no momento.
+        </p>
+
+      </div>
+
+      <!-- HISTÓRICO -->
+      <div>
+
+        <h3 class="text-2xl font-bold mb-4">
+          Histórico de Eventos
+        </h3>
+
+        <p class="bg-gray-100 rounded-lg p-4 text-gray-700">
+          Não existe registro de eventos anteriores no seu nome.
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    // MENU MOBILE
+    const menuButton = document.getElementById("menu-button");
+
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    menuButton.addEventListener("click", () => {
+
+      mobileMenu.classList.toggle("hidden");
+
+    });
+
+    // USUÁRIO LOGADO
+    const usuario = JSON.parse(sessionStorage.getItem("usuario"));
+
+    if (!usuario) {
+
+      window.location.href = "login.html";
+
+    } else {
+
+      document.getElementById("saudacao").textContent = `Olá, ${usuario.nome}!`;
+
+    }
+
+    // SAIR
+    function sair(event) {
+
+      event.preventDefault();
+
+      sessionStorage.removeItem("usuario");
+
+      window.location.href = "login.html";
+
+    }
+
+    document.getElementById("link-sair").addEventListener("click", sair);
+
+    document.getElementById("link-sair-mobile").addEventListener("click", sair);
+
+  </script>
+
+</body>
+</html>

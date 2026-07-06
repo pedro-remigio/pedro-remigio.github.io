@@ -33,6 +33,29 @@ app.get("/", (req, res) => {
   res.redirect("/admin/login");
 });
 
+// Middleware de erro: garante que qualquer falha (banco fora do ar, JSON
+// inválido no corpo da requisição, etc.) sempre gere uma resposta ao invés de
+// deixar a requisição travada ou derrubar o processo inteiro.
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  if (req.path.startsWith("/api")) {
+    return res.status(500).json({ erro: "Erro interno do servidor." });
+  }
+
+  res.status(500).send("Ocorreu um erro interno. Tente novamente mais tarde.");
+});
+
+// Rede de segurança: loga em vez de derrubar o processo em caso de erro
+// assíncrono que escape dos handlers (ex: erro fora do ciclo de requisição).
+process.on("unhandledRejection", (motivo) => {
+  console.error("Unhandled Rejection:", motivo);
+});
+
+process.on("uncaughtException", (erro) => {
+  console.error("Uncaught Exception:", erro);
+});
+
 const PORT = process.env.PORT || 3000;
 
 ensureAdmin()

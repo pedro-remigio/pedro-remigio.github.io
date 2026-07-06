@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const prisma = require("../prisma");
 const { requireAdmin } = require("../middleware/auth");
+const asyncHandler = require("../asyncHandler");
 
 const router = express.Router();
 
@@ -17,18 +18,25 @@ router.get("/login", (req, res) => {
   res.render("login", { erro: null });
 });
 
-router.post("/login", async (req, res) => {
-  const { email, senha } = req.body;
+router.post(
+  "/login",
+  asyncHandler(async (req, res) => {
+    const { email, senha } = req.body || {};
 
-  const admin = await prisma.admin.findUnique({ where: { email } });
+    if (!email || !senha) {
+      return res.status(400).render("login", { erro: "Email e senha são obrigatórios." });
+    }
 
-  if (!admin || !(await bcrypt.compare(senha, admin.senha))) {
-    return res.status(401).render("login", { erro: "Email ou senha inválidos." });
-  }
+    const admin = await prisma.admin.findUnique({ where: { email } });
 
-  req.session.adminId = admin.id;
-  res.redirect("/admin/dashboard");
-});
+    if (!admin || !(await bcrypt.compare(senha, admin.senha))) {
+      return res.status(401).render("login", { erro: "Email ou senha inválidos." });
+    }
+
+    req.session.adminId = admin.id;
+    res.redirect("/admin/dashboard");
+  })
+);
 
 router.get("/logout", (req, res) => {
   req.session.destroy(() => {
@@ -36,16 +44,20 @@ router.get("/logout", (req, res) => {
   });
 });
 
-router.get("/dashboard", requireAdmin, async (req, res) => {
-  const [leads, usuarios] = await Promise.all([
-    prisma.lead.findMany({ orderBy: { createdAt: "desc" } }),
-    prisma.usuario.findMany({
-      orderBy: { createdAt: "desc" },
-      select: { id: true, nome: true, email: true, cpf: true, createdAt: true },
-    }),
-  ]);
+router.get(
+  "/dashboard",
+  requireAdmin,
+  asyncHandler(async (req, res) => {
+    const [leads, usuarios] = await Promise.all([
+      prisma.lead.findMany({ orderBy: { createdAt: "desc" } }),
+      prisma.usuario.findMany({
+        orderBy: { createdAt: "desc" },
+        select: { id: true, nome: true, email: true, cpf: true, createdAt: true },
+      }),
+    ]);
 
-  res.render("dashboard", { leads, usuarios });
-});
+    res.render("dashboard", { leads, usuarios });
+  })
+);
 
 module.exports = router;

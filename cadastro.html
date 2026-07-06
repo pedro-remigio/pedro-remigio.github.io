@@ -267,7 +267,8 @@
         <!-- BOTÃO -->
         <button
           type="submit"
-          class="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-lg font-semibold w-full md:w-auto"
+          id="botao-enviar"
+          class="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-lg font-semibold w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Cadastrar
         </button>
@@ -315,15 +316,35 @@
     // FORMULÁRIO
     const API_URL = "https://remigio-eventos-backend.onrender.com";
 
+    function mensagemErroHttp(status) {
+
+      const mensagens = {
+        400: "Dados inválidos. Verifique os campos e tente novamente.",
+        404: "Recurso não encontrado (404).",
+        408: "Tempo de espera esgotado (408). Tente novamente.",
+        409: "Já existe um cadastro com esse email ou CPF (409).",
+        500: "Erro interno do servidor (500).",
+        502: "Servidor indisponível no momento (502).",
+        503: "Servidor indisponível no momento (503).",
+      };
+
+      return mensagens[status] || `Ocorreu um erro inesperado (${status}).`;
+
+    }
+
     const formCadastro = document.getElementById("form-cadastro");
 
     const mensagemSucesso = document.getElementById("mensagem-sucesso");
 
     const mensagemErro = document.getElementById("mensagem-erro");
 
+    const botaoEnviar = document.getElementById("botao-enviar");
+
     formCadastro.addEventListener("submit", async (event) => {
 
       event.preventDefault();
+
+      if (botaoEnviar.disabled) return;
 
       mensagemSucesso.classList.add("hidden");
 
@@ -336,6 +357,10 @@
         senha: document.getElementById("senha").value,
       };
 
+      botaoEnviar.disabled = true;
+
+      botaoEnviar.textContent = "Cadastrando...";
+
       try {
 
         const resposta = await fetch(`${API_URL}/api/usuarios`, {
@@ -344,11 +369,15 @@
           body: JSON.stringify(dados),
         });
 
-        const resultado = await resposta.json();
-
         if (!resposta.ok) {
 
-          mensagemErro.textContent = `❌ ${resultado.erro || "Não foi possível cadastrar."}`;
+          let resultado = {};
+
+          try {
+            resultado = await resposta.json();
+          } catch (_erroJson) {}
+
+          mensagemErro.textContent = `❌ ${resultado.erro || mensagemErroHttp(resposta.status)}`;
 
           mensagemErro.classList.remove("hidden");
 
@@ -362,9 +391,15 @@
 
       } catch (erro) {
 
-        mensagemErro.textContent = "❌ Não foi possível conectar ao servidor. O backend está rodando?";
+        mensagemErro.textContent = "❌ Não foi possível conectar. Tente novamente em instantes.";
 
         mensagemErro.classList.remove("hidden");
+
+      } finally {
+
+        botaoEnviar.disabled = false;
+
+        botaoEnviar.textContent = "Cadastrar";
 
       }
 
