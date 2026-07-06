@@ -1,0 +1,26 @@
+{
+  "name": "remigio-eventos-backend",
+  "version": "1.0.0",
+  "description": "Backend (Express + Prisma + PostgreSQL) do projeto Remigio Eventos - Checkpoint Back-end",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "seed": "node prisma/seed.js",
+    "render-build": "npm install && npx prisma generate && npx prisma migrate deploy",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.1.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1"
+  },
+  "devDependencies": {
+    "prisma": "^6.1.0"
+  }
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <header class="bg-black text-white shadow-lg">
+    <div class="container mx-auto flex items-center justify-between p-4">
+      <h1 class="font-bold text-xl">Painel do Administrador - Remigio Eventos</h1>
+      <a href="/admin/logout" class="bg-gray-900 hover:bg-red-600 transition px-4 py-2 rounded-lg">Sair</a>
+    </div>
+  </header>
+
+  <main class="container mx-auto py-10 px-6 space-y-12">
+
+    <section>
+      <h2 class="text-2xl font-bold mb-4">
+        Leads (formulário de contato) — <%= leads.length %>
+      </h2>
+
+      <div class="bg-white rounded-xl shadow-lg overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-gray-900 text-white">
+            <tr>
+              <th class="p-3">Nome</th>
+              <th class="p-3">Email</th>
+              <th class="p-3">Evento</th>
+              <th class="p-3">Mensagem</th>
+              <th class="p-3">Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (leads.length === 0) { %>
+              <tr><td class="p-3 text-gray-500" colspan="5">Nenhum lead cadastrado ainda.</td></tr>
+            <% } %>
+            <% leads.forEach((lead) => { %>
+              <tr class="border-t border-gray-200">
+                <td class="p-3"><%= lead.nome %></td>
+                <td class="p-3"><%= lead.email %></td>
+                <td class="p-3"><%= lead.evento || "-" %></td>
+                <td class="p-3"><%= lead.mensagem %></td>
+                <td class="p-3"><%= lead.createdAt.toLocaleString("pt-BR") %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold mb-4">
+        Usuários cadastrados — <%= usuarios.length %>
+      </h2>
+
+      <div class="bg-white rounded-xl shadow-lg overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-gray-900 text-white">
+            <tr>
+              <th class="p-3">Nome</th>
+              <th class="p-3">Email</th>
+              <th class="p-3">CPF</th>
+              <th class="p-3">Data</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (usuarios.length === 0) { %>
+              <tr><td class="p-3 text-gray-500" colspan="4">Nenhum usuário cadastrado ainda.</td></tr>
+            <% } %>
+            <% usuarios.forEach((usuario) => { %>
+              <tr class="border-t border-gray-200">
+                <td class="p-3"><%= usuario.nome %></td>
+                <td class="p-3"><%= usuario.email %></td>
+                <td class="p-3"><%= usuario.cpf %></td>
+                <td class="p-3"><%= usuario.createdAt.toLocaleString("pt-BR") %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+</body>
+</html>

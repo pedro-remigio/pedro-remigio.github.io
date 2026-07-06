@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Registros vindos do formulário de contato/inscrição do site
+model Lead {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String
+  evento    String?
+  mensagem  String
+  createdAt DateTime @default(now())
+}
+
+// Usuários que criam conta no site (área do usuário)
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String   @unique
+  cpf       String   @unique
+  senha     String
+  createdAt DateTime @default(now())
+}
+
+// Login da área administrativa
+model Admin {
+  id    Int    @id @default(autoincrement())
+  email String @unique
+  senha String
+}

@@ -9,7 +9,7 @@
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Contato</title>
+  <title>Cadastro</title>
 
   <link
     rel="icon"
@@ -83,6 +83,15 @@
           </a>
         </li>
 
+        <li>
+          <a
+            href="login.html"
+            class="hover:text-blue-400 transition"
+          >
+            Login
+          </a>
+        </li>
+
       </ul>
 
       <!-- BOTÃO MOBILE -->
@@ -131,6 +140,13 @@
           📞 Contato
         </a>
 
+        <a
+          href="login.html"
+          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
+        >
+          🔑 Login
+        </a>
+
       </div>
 
     </div>
@@ -152,23 +168,15 @@
   <!-- MAIN -->
   <main class="container mx-auto pt-44 pb-16 px-6">
 
-    <section class="bg-white p-8 rounded-xl shadow-lg max-w-2xl mx-auto">
+    <section class="bg-white p-8 rounded-xl shadow-lg max-w-xl mx-auto">
 
       <h2 class="text-4xl font-bold mb-6">
-        Contato
+        Criar Conta
       </h2>
-
-      <p class="mb-2 text-lg">
-        📧 remigio.pedro@gmail.com
-      </p>
-
-      <p class="mb-8 text-lg">
-        📱 (82) 99655-8114
-      </p>
 
       <!-- FORM -->
       <form
-        id="form-contato"
+        id="form-cadastro"
         class="space-y-5"
       >
 
@@ -214,43 +222,45 @@
 
         </div>
 
-        <!-- EVENTO -->
+        <!-- CPF -->
         <div>
 
           <label
-            for="evento"
+            for="cpf"
             class="block mb-2 font-semibold"
           >
-            Evento
+            CPF
+            <span class="text-red-600">*</span>
           </label>
 
           <input
             type="text"
-            id="evento"
-            placeholder="Ex: Tech Summit 2026"
+            id="cpf"
+            required
+            placeholder="Digite seu CPF"
             class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
 
         </div>
 
-        <!-- MENSAGEM -->
+        <!-- SENHA -->
         <div>
 
           <label
-            for="mensagem"
+            for="senha"
             class="block mb-2 font-semibold"
           >
-            Mensagem
+            Senha
             <span class="text-red-600">*</span>
           </label>
 
-          <textarea
-            id="mensagem"
-            rows="5"
+          <input
+            type="password"
+            id="senha"
             required
-            placeholder="Digite sua mensagem"
-            class="w-full border border-gray-300 rounded-lg p-3 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-          ></textarea>
+            placeholder="Digite sua senha"
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
 
         </div>
 
@@ -259,7 +269,7 @@
           type="submit"
           class="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-lg font-semibold w-full md:w-auto"
         >
-          Enviar Mensagem
+          Cadastrar
         </button>
 
       </form>
@@ -269,7 +279,20 @@
         id="mensagem-sucesso"
         class="hidden text-green-600 mt-6 font-bold text-center"
       >
-        ✅ Mensagem enviada com sucesso!
+        ✅ Cadastro realizado com sucesso!
+      </p>
+
+      <p
+        id="mensagem-erro"
+        class="hidden text-red-600 mt-6 font-bold text-center"
+      >
+      </p>
+
+      <p class="mt-6 text-center">
+        Já tem conta?
+        <a href="login.html" class="text-blue-600 hover:underline font-semibold">
+          Fazer login
+        </a>
       </p>
 
     </section>
@@ -292,44 +315,58 @@
     // FORMULÁRIO
     const API_URL = "http://localhost:3000";
 
-    const formContato = document.getElementById("form-contato");
+    const formCadastro = document.getElementById("form-cadastro");
 
     const mensagemSucesso = document.getElementById("mensagem-sucesso");
 
-    formContato.addEventListener("submit", async (event) => {
+    const mensagemErro = document.getElementById("mensagem-erro");
+
+    formCadastro.addEventListener("submit", async (event) => {
 
       event.preventDefault();
+
+      mensagemSucesso.classList.add("hidden");
+
+      mensagemErro.classList.add("hidden");
 
       const dados = {
         nome: document.getElementById("nome").value,
         email: document.getElementById("email").value,
-        evento: document.getElementById("evento").value,
-        mensagem: document.getElementById("mensagem").value,
+        cpf: document.getElementById("cpf").value,
+        senha: document.getElementById("senha").value,
       };
 
       try {
 
-        await fetch(`${API_URL}/api/leads`, {
+        const resposta = await fetch(`${API_URL}/api/usuarios`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dados),
         });
 
+        const resultado = await resposta.json();
+
+        if (!resposta.ok) {
+
+          mensagemErro.textContent = `❌ ${resultado.erro || "Não foi possível cadastrar."}`;
+
+          mensagemErro.classList.remove("hidden");
+
+          return;
+
+        }
+
+        mensagemSucesso.classList.remove("hidden");
+
+        formCadastro.reset();
+
       } catch (erro) {
 
-        console.error("Não foi possível salvar no backend:", erro);
+        mensagemErro.textContent = "❌ Não foi possível conectar ao servidor. O backend está rodando?";
+
+        mensagemErro.classList.remove("hidden");
 
       }
-
-      mensagemSucesso.classList.remove("hidden");
-
-      formContato.reset();
-
-      setTimeout(() => {
-
-        mensagemSucesso.classList.add("hidden");
-
-      }, 4000);
 
     });
 
