@@ -23,13 +23,16 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     environment:
-      DATABASE_URL:    postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-remigio_eventos}?schema=public
-      PORT:            3000
-      SESSION_SECRET:  ${SESSION_SECRET:-chave-secreta-docker-troque-isso}
-      ADMIN_EMAIL:     ${ADMIN_EMAIL:-admin@remigioeventos.com}
-      ADMIN_PASSWORD:  ${ADMIN_PASSWORD:-Oxetech2026}
-      FRONTEND_URL:    ""
-      NODE_ENV:        development
+      DATABASE_URL:       postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-remigio_eventos}?schema=public
+      PORT:               3000
+      SESSION_SECRET:     ${SESSION_SECRET:-chave-secreta-docker-troque-isso}
+      ADMIN_EMAIL:        ${ADMIN_EMAIL:-admin@remigioeventos.com}
+      ADMIN_PASSWORD:     ${ADMIN_PASSWORD:-Oxetech2026}
+      FRONTEND_URL:       ${FRONTEND_URL:-""}
+      NODE_ENV:           ${NODE_ENV:-development}
+      MP_ACCESS_TOKEN:    ${MP_ACCESS_TOKEN:-""}
+      MP_WEBHOOK_SECRET:  ${MP_WEBHOOK_SECRET:-""}
+      BACKEND_URL:        ${BACKEND_URL:-""}
     depends_on:
       db:
         condition: service_healthy
