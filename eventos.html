@@ -160,8 +160,12 @@
       nenhum.classList.add("hidden");
 
       lista.forEach((evento) => {
-        const imagem = evento.imagem ||
-          "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop";
+        const id      = Number(evento.id);
+        const titulo  = escaparHTML(evento.titulo);
+        const descricao = escaparHTML(evento.descricao);
+        const local   = escaparHTML(evento.local);
+        const imgSrc  = escaparHTML(evento.imagem ||
+          "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop");
 
         const badgeClass = evento.status === "ativo"
           ? "bg-green-100 text-green-700"
@@ -175,19 +179,19 @@
 
         const botaoHtml = evento.status === "ativo"
           ? `<div class="flex gap-2 flex-wrap">
-               <a href="evento.html?id=${evento.id}"
+               <a href="evento.html?id=${id}"
                  class="bg-gray-100 hover:bg-gray-200 transition text-gray-700 px-4 py-3 rounded-lg font-semibold text-sm">
                  Ver detalhes
                </a>
                <button
-                 id="btn-inscrever-${evento.id}"
-                 onclick="inscrever(${evento.id}, '${evento.titulo.replace(/'/g, "\\'")}')"
+                 id="btn-inscrever-${id}"
+                 onclick="inscrever(${id}, ${JSON.stringify(evento.titulo)})"
                  class="bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-3 rounded-lg font-semibold text-sm"
                >
                  🎟️ Inscrever-se
                </button>
              </div>`
-          : `<a href="evento.html?id=${evento.id}"
+          : `<a href="evento.html?id=${id}"
                class="inline-block bg-gray-100 hover:bg-gray-200 transition text-gray-600 px-5 py-3 rounded-lg font-semibold text-sm">
                Ver detalhes
              </a>`;
@@ -195,10 +199,10 @@
         container.innerHTML += `
           <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition duration-300 flex flex-col">
 
-            <a href="evento.html?id=${evento.id}">
+            <a href="evento.html?id=${id}">
               <img
-                src="${imagem}"
-                alt="${evento.titulo}"
+                src="${imgSrc}"
+                alt="${titulo}"
                 class="w-full h-56 object-cover hover:opacity-90 transition"
               >
             </a>
@@ -206,15 +210,15 @@
             <div class="p-6 flex flex-col flex-1">
 
               <div class="flex items-center justify-between mb-2">
-                <a href="evento.html?id=${evento.id}" class="hover:text-blue-600 transition">
-                  <h3 class="text-xl font-bold">${evento.titulo}</h3>
+                <a href="evento.html?id=${id}" class="hover:text-blue-600 transition">
+                  <h3 class="text-xl font-bold">${titulo}</h3>
                 </a>
                 <span class="px-2 py-1 rounded-full text-xs font-semibold ${badgeClass}">${badgeTexto}</span>
               </div>
 
-              <p class="text-gray-500 text-sm mb-4 line-clamp-2">${evento.descricao}</p>
+              <p class="text-gray-500 text-sm mb-4 line-clamp-2">${descricao}</p>
 
-              <p class="mb-1 text-gray-600 text-sm">📍 ${evento.local}</p>
+              <p class="mb-1 text-gray-600 text-sm">📍 ${local}</p>
               <p class="mb-1 text-gray-600 text-sm">📅 ${formatarData(evento.data)}</p>
               <p class="mb-6 text-sm">💰 ${precoHtml}</p>
 

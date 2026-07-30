@@ -6,6 +6,28 @@ const asyncHandler = require("../asyncHandler");
 
 const router = express.Router();
 
+// ─── Rate limiter (proteção brute-force no login do admin) ───────────────────
+const tentativasAdmin = new Map();
+
+function rateLimitAdmin(req, res, next) {
+  const ip = req.ip;
+  const agora = Date.now();
+  const janela = 15 * 60 * 1000; // 15 minutos
+  const max = 10;
+
+  const reg = tentativasAdmin.get(ip) || { count: 0, inicio: agora };
+  if (agora - reg.inicio > janela) { reg.count = 1; reg.inicio = agora; }
+  else reg.count++;
+  tentativasAdmin.set(ip, reg);
+
+  if (reg.count > max) {
+    return res.status(429).render("login", {
+      erro: "Muitas tentativas. Aguarde alguns minutos e tente novamente.",
+    });
+  }
+  next();
+}
+
 router.get("/", (req, res) => {
   res.redirect("/admin/dashboard");
 });
@@ -19,6 +41,7 @@ router.get("/login", (req, res) => {
 
 router.post(
   "/login",
+  rateLimitAdmin,
   asyncHandler(async (req, res) => {
     const { email, senha } = req.body || {};
 

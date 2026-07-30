@@ -34,6 +34,19 @@ async function apiFetch(caminho, opcoes = {}) {
   return dados;
 }
 
+// ─── Escape de HTML (prevenção de XSS) ───────────────────────────────────────
+// Converte caracteres especiais em entidades HTML antes de inserir no DOM.
+// SEMPRE use escaparHTML() ao colocar dados externos dentro de innerHTML.
+function escaparHTML(str) {
+  if (str == null) return "";
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 // ─── Verificação de sessão ────────────────────────────────────────────────────
 // Verifica com o servidor se o usuário está logado.
 // Retorna o objeto { usuario } ou null.

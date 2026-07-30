@@ -42,6 +42,7 @@ function rateLimit(max, janelaMs) {
 // POST /api/leads — envia mensagem de contato
 router.post(
   "/leads",
+  rateLimit(10, 15 * 60 * 1000), // max 10 mensagens por IP a cada 15 min
   asyncHandler(async (req, res) => {
     const { nome, email, telefone, evento, mensagem } = req.body || {};
 
@@ -506,6 +507,7 @@ router.delete(
 // POST /api/auth/esqueci-senha — gera token de redefinição
 router.post(
   "/auth/esqueci-senha",
+  rateLimit(5, 15 * 60 * 1000), // max 5 tentativas por IP a cada 15 min
   asyncHandler(async (req, res) => {
     const { email } = req.body || {};
 
