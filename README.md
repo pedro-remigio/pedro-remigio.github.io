@@ -7,33 +7,42 @@ Desenvolvida como Projeto Final Integrador da Oxetech Academy.
 
 | Serviço | URL |
 |---------|-----|
-| Front-end (GitHub Pages) | https://pedro-remigio.github.io |
-| Back-end (AWS / Render) | https://remigio-eventos-backend.onrender.com |
-| Painel do Admin | https://remigio-eventos-backend.onrender.com/admin/login |
+| Front-end | https://eventos.pedroremigio.com.br |
+| Back-end (API) | https://apieventos.pedroremigio.com.br |
+| Painel do Admin | https://apieventos.pedroremigio.com.br/admin/login |
+
+## Credenciais do Admin
+
+| Campo | Valor |
+|-------|-------|
+| Email | admin@remigioeventos.com |
+| Senha | definida no `.env` do servidor |
 
 ## Funcionalidades
 
 - Listagem de eventos (ativos e encerrados) com filtro por status
 - Inscrição em eventos para usuários autenticados
-- Área do usuário com inscrições e download de certificado de participação
+- Área do usuário com edição de perfil e solicitação de alteração de dados sensíveis
 - Formulário de contato persistido no banco de dados
-- Cadastro e login com senha criptografada (bcrypt) e sessão em cookie httpOnly
-- Painel administrativo com CRUD de eventos, inscrições e mensagens de contato
-- Segurança básica: Helmet, CORS restrito, rate limiting no login, cookie seguro em produção
+- Cadastro e login com senha criptografada (bcrypt custo 12) e sessão em cookie httpOnly
+- Redefinição de senha via token
+- Painel administrativo com CRUD de eventos, relatório por evento, inscrições e mensagens
+- Segurança: Helmet, CORS restrito, rate limiting, anti-enumeração, cookie seguro em produção
 
 ## Entidades do banco
 
 ```
 Usuario ─── Inscricao ─── Evento
+TokenRedefinicaoSenha
 Lead
 Admin
 ```
 
-- **Usuario**: id, nome, email (único), cpf (único), senha (hash bcrypt), createdAt
-- **Evento**: id, titulo, descricao, data, local, capacidade, imagem, status (ativo/encerrado/cancelado), createdAt
-- **Inscricao**: id, usuarioId (FK), eventoId (FK), createdAt — unique(usuarioId, eventoId)
-- **Lead**: id, nome, email, evento, mensagem, createdAt
-- **Admin**: id, email (único), senha (hash bcrypt)
+- **Usuario**: id, nome, email (único), cpf (único), tipoDocumento, telefone, senha (bcrypt), createdAt
+- **Evento**: id, titulo, descricao, data, local, capacidade, imagem, preco, status, createdAt
+- **Inscricao**: id, usuarioId (FK), eventoId (FK), status (confirmada/pendente/cancelada), pagamentoId, createdAt
+- **Lead**: id, nome, email, telefone, evento, mensagem, createdAt
+- **Admin**: id, email (único), senha (bcrypt)
 
 ## Endpoints principais da API
 
@@ -43,95 +52,96 @@ Admin
 | GET | `/api/eventos/:id` | Público | Detalhes de um evento |
 | POST | `/api/leads` | Público | Envia mensagem de contato |
 | POST | `/api/usuarios` | Público | Cadastro de usuário |
-| POST | `/api/usuarios/login` | Público | Login (cria sessão em cookie) |
-| POST | `/api/usuarios/logout` | Público | Logout (destrói sessão) |
+| POST | `/api/usuarios/login` | Público | Login |
+| POST | `/api/usuarios/logout` | Público | Logout |
 | GET | `/api/usuarios/me` | Privado | Dados do usuário logado |
-| GET | `/api/usuarios/me/inscricoes` | Privado | Inscrições do usuário logado |
+| PATCH | `/api/usuarios/me` | Privado | Atualiza nome e telefone |
+| GET | `/api/usuarios/me/inscricoes` | Privado | Inscrições do usuário |
 | POST | `/api/inscricoes` | Privado | Inscreve usuário em evento |
-| GET | `/api/certificado/:id` | Privado | Certificado HTML de participação |
-| GET | `/admin/login` | Admin | Login do painel administrativo |
-| GET | `/admin/dashboard` | Admin | Painel com todos os dados |
-| POST | `/admin/eventos` | Admin | Cria evento |
-| POST | `/admin/eventos/:id` | Admin | Atualiza evento |
-| POST | `/admin/eventos/:id/deletar` | Admin | Remove evento |
+| POST | `/api/usuarios/esqueci-senha` | Público | Solicita reset de senha |
+| POST | `/api/usuarios/redefinir-senha` | Público | Redefine senha via token |
+| GET | `/admin/dashboard` | Admin | Painel administrativo |
+| GET | `/admin/eventos/:id/relatorio` | Admin | Relatório do evento |
 
 ## Variáveis de ambiente (backend)
 
-Crie o arquivo `backend/.env` com base em `backend/.env.example`:
+Crie o arquivo `backend/.env` com base em `backend/.env.docker.example`:
 
 ```env
-DATABASE_URL="postgresql://usuario:senha@host:5432/remigio_eventos?schema=public"
-PORT=3000
-SESSION_SECRET="string-aleatoria-longa"
-ADMIN_EMAIL="admin@remigioeventos.com"
-ADMIN_PASSWORD="sua-senha"
-FRONTEND_URL="https://pedro-remigio.github.io"
-NODE_ENV="production"
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=senha-forte
+POSTGRES_DB=remigio_eventos
+SESSION_SECRET=string-aleatoria-longa
+ADMIN_EMAIL=admin@remigioeventos.com
+ADMIN_PASSWORD=senha-forte
+FRONTEND_URL=https://eventos.pedroremigio.com.br
+NODE_ENV=production
 ```
 
-## Rodando localmente com Docker (ISO offline)
+## Infraestrutura de produção
 
-```bash
-# 1. Entre na pasta do backend
-cd backend
-
-# 2. Copie o arquivo de variáveis
-cp .env.docker.example .env
-# (edite o .env com suas senhas)
-
-# 3. Suba os containers (backend Node + PostgreSQL)
-docker compose up --build
-
-# 4. (Opcional) Populando com dados de exemplo
-docker compose exec backend npm run seed
-```
-
-Acesse: http://localhost:3000/admin/login
-
-Login padrão: `admin@remigioeventos.com` / definido no `.env`
-
-## Rodando localmente (sem Docker)
-
-```bash
-cd backend
-npm install
-# Configure o .env com DATABASE_URL apontando para um Postgres local ou Neon
-npx prisma migrate deploy
-npx prisma generate
-npm run seed
-npm run dev
-```
+| Componente | Serviço |
+|------------|---------|
+| Frontend | GitHub Pages + domínio próprio |
+| Backend | AWS EC2 t3.micro (Amazon Linux 2023) |
+| Banco de dados | PostgreSQL via Docker no EC2 |
+| SSL | Let's Encrypt (Certbot) |
+| Domínio | pedroremigio.com.br (Registro.br) |
 
 ## Deploy na AWS (EC2)
 
 ```bash
-# Na instância EC2 (Ubuntu 22.04):
+# Na instância EC2 (Amazon Linux 2023), após conectar via SSH:
 git clone https://github.com/pedro-remigio/pedro-remigio.github.io.git
 cd pedro-remigio.github.io/backend
 
-# Instala Docker
+# Instala Docker (só na primeira vez)
 bash scripts/ec2-setup.sh
 
-# (Reconecte via SSH após o script)
+# Reconecte via SSH após o script, depois:
 cp .env.docker.example .env
-# Edite o .env com NODE_ENV=production e FRONTEND_URL=https://pedro-remigio.github.io
-nano .env
+nano .env   # preencha com os valores reais de produção
 
 docker compose up -d --build
 ```
 
+## Rodando localmente com Docker
+
+```bash
+# Da pasta raiz do projeto:
+docker compose up --build
+
+# Acesse:
+# Site:  http://localhost
+# Admin: http://localhost/admin
+```
+
+## Rodando localmente sem Docker
+
+```bash
+cd backend
+npm install
+cp .env.example .env   # configure DATABASE_URL com um Postgres local
+npx prisma migrate deploy
+node prisma/seed.js
+npm run dev
+
+# Frontend: na pasta raiz, rode:
+npx serve -l 8080
+```
+
 ## Tecnologias
 
-- HTML5, Tailwind CSS, JavaScript Vanilla
-- Node.js, Express, EJS
-- Prisma ORM, PostgreSQL (Neon)
+- HTML5, Tailwind CSS (CDN), JavaScript Vanilla
+- Node.js 20, Express, EJS
+- Prisma ORM, PostgreSQL 17
 - bcryptjs, express-session, Helmet, CORS
-- Docker, Docker Compose
-- GitHub Pages (front), AWS EC2 (back)
+- Docker, Docker Compose, nginx
+- GitHub Pages (frontend), AWS EC2 (backend)
+- Domínio próprio + Let's Encrypt (SSL)
 
-## Limitações conhecidas e próximos passos
+## Próximos passos
 
-- Sem sistema de pagamentos (fora do escopo acadêmico)
-- Sessão armazenada em memória (sem persistência entre reinicializações do servidor)
-- Certificado gerado em HTML (sem assinatura digital)
-- Próximos passos: integração de pagamentos (Stripe/Mercado Pago), upload de imagens, notificações por email, testes automatizados
+- Integração com Mercado Pago (inscrição paga no Campeonato de LoL)
+- Upload de imagens para eventos
+- Notificações por e-mail (confirmação de inscrição)

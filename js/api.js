@@ -17,7 +17,7 @@ const API_URL = window.location.port === "8080"
 // ─── Fetch com credentials ────────────────────────────────────────────────────
 // credentials: "include" envia e recebe o cookie de sessão em todas as
 // requisições cross-origin (necessário para rotas privadas funcionarem
-// entre GitHub Pages e o backend na AWS/Render).
+// entre GitHub Pages e o backend na AWS).
 async function apiFetch(caminho, opcoes = {}) {
   const resposta = await fetch(`${API_URL}${caminho}`, {
     headers: { "Content-Type": "application/json", ...(opcoes.headers || {}) },

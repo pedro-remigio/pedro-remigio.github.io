@@ -16,7 +16,7 @@
  *
  * Exemplos:
  *   node scripts/testar-seguranca.js
- *   node scripts/testar-seguranca.js https://remigio-eventos-backend.onrender.com
+ *   node scripts/testar-seguranca.js https://apieventos.pedroremigio.com.br
  */
 
 const BASE = process.argv[2] || "http://localhost:3000";

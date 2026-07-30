@@ -8,7 +8,6 @@
     "start": "node src/server.js",
     "seed": "node prisma/seed.js",
     "test:seguranca": "node scripts/testar-seguranca.js",
-    "render-build": "npm install && npx prisma generate && npx prisma migrate deploy",
     "aws-build": "npm install && npx prisma generate && npx prisma migrate deploy",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio"
