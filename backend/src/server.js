@@ -12,6 +12,12 @@ const ensureAdmin = require("./ensureAdmin");
 
 const app = express();
 
+// ─── Proxy reverso (nginx) ────────────────────────────────────────────────────
+// Informa ao Express que está atrás de um proxy (nginx).
+// Sem isso, req.secure retorna false mesmo com HTTPS e os cookies seguros
+// não são enviados — o login do admin e a sessão param de funcionar.
+app.set("trust proxy", 1);
+
 // ─── Segurança: cabeçalhos HTTP (OWASP A05 – Security Misconfiguration) ───────
 // Helmet adiciona X-Frame-Options, X-Content-Type-Options,
 // Strict-Transport-Security, etc., cobrindo vários itens do OWASP Top 10.
