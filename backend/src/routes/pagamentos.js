@@ -134,14 +134,12 @@ router.post(
           {
             id: String(evento.id),
             title: `Inscrição — ${evento.titulo}`,
-            description: `Inscrição no evento: ${evento.titulo}`,
             quantity: 1,
             unit_price: Number(evento.preco),
             currency_id: "BRL",
           },
         ],
         payer: {
-          name: usuario.nome,
           email: usuario.email,
         },
         back_urls: {
@@ -150,9 +148,8 @@ router.post(
           pending: `${frontendUrl}/pagamento-sucesso.html`,
         },
         auto_return: "approved",
-        // external_reference: usamos o ID da inscrição para identificar no webhook
         external_reference: String(inscricao.id),
-        statement_descriptor: "REMIGIO EVENTOS",
+        notification_url: `${backendUrl}/api/pagamentos/webhook`,
       },
     });
 
