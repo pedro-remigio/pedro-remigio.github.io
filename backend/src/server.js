@@ -80,8 +80,10 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // ─── Rotas ────────────────────────────────────────────────────────────────────
-app.use("/api", publicRoutes);
+// ⚠️ Pagamentos ANTES de publicRoutes — publicRoutes tem catch-all no final
+// que engolaria /api/pagamentos/* se registrado depois.
 app.use("/api/pagamentos", pagamentosRoutes);
+app.use("/api", publicRoutes);
 app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
