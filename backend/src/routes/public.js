@@ -332,6 +332,7 @@ router.get(
             local: true,
             status: true,
             imagem: true,
+            preco: true,
           },
         },
       },
