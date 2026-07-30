@@ -1,8 +1,37 @@
 const express = require("express");
+const crypto  = require("crypto");
 const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
 const prisma = require("../prisma");
 const asyncHandler = require("../asyncHandler");
 const { requireUser } = require("../middleware/auth");
+
+// ─── Valida assinatura do webhook do Mercado Pago ─────────────────────────────
+// O MP envia o header "x-signature" com ts= e v1= para provar que a notificação
+// veio de fato deles e não de alguém tentando forjar uma confirmação de pagamento.
+function validarAssinaturaMP(req) {
+  const secret = process.env.MP_WEBHOOK_SECRET;
+  if (!secret) return true; // sem secret configurado: aceita (dev/testes iniciais)
+
+  const xSignature = req.headers["x-signature"];
+  const xRequestId = req.headers["x-request-id"];
+  if (!xSignature || !xRequestId) return false;
+
+  const partes = {};
+  xSignature.split(",").forEach((p) => {
+    const [k, v] = p.split("=");
+    if (k && v) partes[k.trim()] = v.trim();
+  });
+
+  const ts = partes["ts"];
+  const v1 = partes["v1"];
+  if (!ts || !v1) return false;
+
+  const dataId   = req.body?.data?.id ?? "";
+  const manifest = `id:${dataId};request-id:${xRequestId};ts:${ts};`;
+
+  const hash = crypto.createHmac("sha256", secret).update(manifest).digest("hex");
+  return hash === v1;
+}
 
 const router = express.Router();
 
@@ -151,6 +180,12 @@ router.post(
 router.post(
   "/webhook",
   asyncHandler(async (req, res) => {
+    // Valida assinatura antes de processar
+    if (!validarAssinaturaMP(req)) {
+      console.warn("[MP Webhook] Assinatura inválida — requisição ignorada.");
+      return res.status(200).send("OK"); // retorna 200 mesmo assim (evita retentativas do MP)
+    }
+
     // Responde 200 imediatamente — o MP espera resposta rápida
     // Se demorar, ele tenta de novo (pode causar duplicatas)
     res.status(200).send("OK");
