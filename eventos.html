@@ -117,44 +117,28 @@
       setTimeout(() => toast.classList.add("hidden"), 3500);
     }
 
-    // Inscreve o usuário em um evento (gratuito ou pago)
+    // Inscreve o usuário em um evento
     async function inscrever(eventoId, titulo) {
       try {
-        // Verifica se o evento é pago buscando os dados que já estão na lista
         const evento = todosEventos.find(e => e.id === eventoId);
 
-        // ── Evento PAGO: redireciona para o Mercado Pago ─────────────────────
-        if (evento?.preco != null) {
-          const sessao = await verificarSessao();
-          if (!sessao) {
-            mostrarToast("⚠️ Faça login para se inscrever.", "erro");
-            setTimeout(() => { window.location.href = "login.html"; }, 1500);
-            return;
-          }
-          const btn = document.getElementById(`btn-inscrever-${eventoId}`);
-          if (btn) { btn.disabled = true; btn.textContent = "Abrindo pagamento..."; }
-
-          const dados = await apiFetch("/api/pagamentos/criar-preferencia", {
-            method: "POST",
-            body: JSON.stringify({ eventoId }),
-          });
-          window.location.href = dados.checkout_url;
-          return;
-        }
-
-        // ── Evento GRATUITO: inscrição direta ────────────────────────────────
         await apiFetch("/api/inscricoes", {
           method: "POST",
           body: JSON.stringify({ eventoId }),
         });
 
-        mostrarToast(`✅ Inscrição confirmada em "${titulo}"!`);
-
         const btn = document.getElementById(`btn-inscrever-${eventoId}`);
         if (btn) {
-          btn.textContent = "✅ Inscrito";
           btn.disabled = true;
           btn.className = btn.className.replace("bg-blue-600 hover:bg-blue-700", "bg-green-600");
+        }
+
+        if (evento?.preco != null) {
+          mostrarToast(`✅ Inscrito em "${titulo}"! Acesse sua área do usuário para pagar.`);
+          if (btn) btn.textContent = "✅ Inscrito";
+        } else {
+          mostrarToast(`✅ Inscrição confirmada em "${titulo}"!`);
+          if (btn) btn.textContent = "✅ Inscrito";
         }
 
       } catch (erro) {
@@ -199,10 +183,6 @@
           ? `<span class="font-semibold text-blue-700">R$ ${evento.preco.toFixed(2).replace(".", ",")}</span>`
           : `<span class="text-green-700 font-semibold">Gratuito</span>`;
 
-        const textoBotao = evento.preco != null
-          ? `💳 Pagar R$ ${evento.preco.toFixed(2).replace(".", ",")}`
-          : `🎟️ Inscrever-se`;
-
         const botaoHtml = evento.status === "ativo"
           ? `<div class="flex gap-2 flex-wrap">
                <a href="evento.html?id=${id}"
@@ -214,7 +194,7 @@
                  onclick="inscrever(${id}, ${JSON.stringify(evento.titulo)})"
                  class="bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-3 rounded-lg font-semibold text-sm"
                >
-                 ${textoBotao}
+                 🎟️ Inscrever-se
                </button>
              </div>`
           : `<a href="evento.html?id=${id}"

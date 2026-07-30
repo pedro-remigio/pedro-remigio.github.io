@@ -298,9 +298,12 @@ router.post(
     }
 
     try {
+      // Eventos pagos entram como "pendente" — o usuário paga pela área do usuário
+      const statusInicial = evento.preco != null ? "pendente" : "confirmada";
+
       const inscricao = await prisma.inscricao.create({
-        data: { usuarioId: req.session.userId, eventoId: evento.id },
-        include: { evento: { select: { titulo: true, data: true, local: true } } },
+        data: { usuarioId: req.session.userId, eventoId: evento.id, status: statusInicial },
+        include: { evento: { select: { titulo: true, data: true, local: true, preco: true } } },
       });
 
       res.status(201).json({ ok: true, inscricao });

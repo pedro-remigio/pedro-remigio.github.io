@@ -175,29 +175,52 @@
       const dataEvento = new Date(evento.data);
       const jaOcorreu  = dataEvento < new Date();
 
-      const botaoCertificado = encerrado
-        ? `<a
-             href="${API_URL}/api/certificado/${inscricaoId}"
-             target="_blank"
-             class="inline-block bg-green-600 hover:bg-green-700 transition text-white px-4 py-2 rounded-lg text-sm font-semibold mt-3"
-           >
-             🏆 Baixar Certificado
-           </a>`
-        : jaOcorreu
-        ? `<span class="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-semibold mt-3">
-             ✅ Participação registrada
-           </span>`
-        : `<div class="flex items-center gap-3 mt-3 flex-wrap">
-             <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
-               ✅ Inscrição confirmada
-             </span>
-             <button
-               onclick="cancelarInscricao(${inscricaoId}, ${JSON.stringify(evento.titulo)})"
-               class="text-xs text-red-500 hover:text-red-700 hover:underline transition"
+      // ── Inscrição pendente (evento pago aguardando pagamento) ────────────────
+      if (inscricao.status === "pendente") {
+        var botaoCertificado = `
+          <div class="flex items-center gap-3 mt-3 flex-wrap">
+            <span class="inline-block bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-semibold">
+              ⏳ Pagamento pendente
+            </span>
+            <button
+              id="btn-pagar-${inscricaoId}"
+              onclick="pagarInscricao(${inscricaoId})"
+              class="bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-2 rounded-lg text-xs font-semibold"
+            >
+              💳 Pagar agora
+            </button>
+            <button
+              onclick="cancelarInscricao(${inscricaoId}, ${JSON.stringify(evento.titulo)})"
+              class="text-xs text-red-500 hover:text-red-700 hover:underline transition"
+            >
+              Cancelar
+            </button>
+          </div>`;
+      } else {
+        var botaoCertificado = encerrado
+          ? `<a
+               href="${API_URL}/api/certificado/${inscricaoId}"
+               target="_blank"
+               class="inline-block bg-green-600 hover:bg-green-700 transition text-white px-4 py-2 rounded-lg text-sm font-semibold mt-3"
              >
-               Cancelar inscrição
-             </button>
-           </div>`;
+               🏆 Baixar Certificado
+             </a>`
+          : jaOcorreu
+          ? `<span class="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-semibold mt-3">
+               ✅ Participação registrada
+             </span>`
+          : `<div class="flex items-center gap-3 mt-3 flex-wrap">
+               <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
+                 ✅ Inscrição confirmada
+               </span>
+               <button
+                 onclick="cancelarInscricao(${inscricaoId}, ${JSON.stringify(evento.titulo)})"
+                 class="text-xs text-red-500 hover:text-red-700 hover:underline transition"
+               >
+                 Cancelar inscrição
+               </button>
+             </div>`;
+      }
 
       const imagemHtml = evento.imagem
         ? `<img src="${escaparHTML(evento.imagem)}" alt="${escaparHTML(evento.titulo)}" class="w-20 h-20 object-cover rounded-lg flex-shrink-0">`
@@ -380,6 +403,28 @@
         document.getElementById("proximos-eventos").innerHTML =
           `<p class="text-red-500 p-4">Não foi possível carregar suas inscrições. Tente recarregar a página.</p>`;
         document.getElementById("historico-eventos").innerHTML = "";
+      }
+    }
+
+    // Inicia pagamento de inscrição pendente via Mercado Pago
+    async function pagarInscricao(inscricaoId) {
+      const btn = document.getElementById(`btn-pagar-${inscricaoId}`);
+      if (btn) { btn.disabled = true; btn.textContent = "Abrindo pagamento..."; }
+
+      try {
+        // Busca o eventoId da inscrição pendente
+        const dados = await apiFetch(`/api/pagamentos/status/${inscricaoId}`);
+        const eventoId = dados.inscricao?.eventoId;
+
+        const resposta = await apiFetch("/api/pagamentos/criar-preferencia", {
+          method: "POST",
+          body: JSON.stringify({ eventoId }),
+        });
+
+        window.location.href = resposta.checkout_url;
+      } catch (erro) {
+        alert(`❌ ${erro.message}`);
+        if (btn) { btn.disabled = false; btn.textContent = "💳 Pagar agora"; }
       }
     }
 
