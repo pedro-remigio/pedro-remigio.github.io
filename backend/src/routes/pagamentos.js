@@ -147,21 +147,21 @@ router.post(
         back_urls: {
           success: `${frontendUrl}/pagamento-sucesso.html`,
           failure: `${frontendUrl}/pagamento-falha.html`,
-          pending: `${frontendUrl}/pagamento-pendente.html`,
+          pending: `${frontendUrl}/pagamento-sucesso.html`,
         },
         auto_return: "approved",
-        // notification_url: o Mercado Pago vai fazer POST aqui quando o pagamento mudar de status
-        notification_url: `${backendUrl}/api/pagamentos/webhook`,
         // external_reference: usamos o ID da inscrição para identificar no webhook
         external_reference: String(inscricao.id),
         statement_descriptor: "REMIGIO EVENTOS",
       },
     });
 
+    console.log(`[MP] Preferência criada: ${preferenceData.id} → inscrição ${inscricao.id}`);
+
     res.json({
       ok: true,
-      checkout_url: preferenceData.init_point,         // URL para redirecionar (produção)
-      checkout_url_sandbox: preferenceData.sandbox_init_point, // URL para testes
+      checkout_url: preferenceData.init_point,
+      checkout_url_sandbox: preferenceData.sandbox_init_point,
       inscricao_id: inscricao.id,
     });
   })
