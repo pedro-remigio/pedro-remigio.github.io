@@ -159,25 +159,20 @@ router.post(
     const backendUrl  = process.env.BACKEND_URL  || "https://apieventos.pedroremigio.com.br";
     const token       = process.env.MP_ACCESS_TOKEN;
 
+    // Body mínimo — idêntico ao curl que funcionou no EC2
     const mpResp = await mpPost("/checkout/preferences", {
       items: [
         {
-          id: String(evento.id),
           title: `Inscrição — ${evento.titulo}`,
           quantity: 1,
           unit_price: Number(evento.preco),
           currency_id: "BRL",
         },
       ],
-      payer: { email: usuario.email },
       back_urls: {
         success: `${frontendUrl}/pagamento-sucesso.html`,
-        failure: `${frontendUrl}/pagamento-falha.html`,
-        pending: `${frontendUrl}/pagamento-sucesso.html`,
       },
-      auto_return: "approved",
       external_reference: String(inscricao.id),
-      notification_url: `${backendUrl}/api/pagamentos/webhook`,
     }, token);
 
     if (mpResp.status !== 201) {
