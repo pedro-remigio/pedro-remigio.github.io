@@ -199,6 +199,11 @@
               Inscrições encerradas
             </span>`;
         } else {
+          // Ajusta o texto do botão conforme o tipo de evento
+          if (e.preco != null) {
+            btnInscrever.textContent = `💳 Pagar R$ ${e.preco.toFixed(2).replace(".", ",")} e garantir vaga`;
+          }
+
           btnInscrever.addEventListener("click", async () => {
             // Verifica se está logado
             const sessao = await verificarSessao();
@@ -209,9 +214,22 @@
             }
 
             btnInscrever.disabled = true;
-            btnInscrever.textContent = "Inscrevendo...";
 
             try {
+              // ── Evento PAGO: abre o checkout do Mercado Pago ──────────────
+              if (e.preco != null) {
+                btnInscrever.textContent = "Abrindo pagamento...";
+                const dados = await apiFetch("/api/pagamentos/criar-preferencia", {
+                  method: "POST",
+                  body: JSON.stringify({ eventoId: e.id }),
+                });
+                // Redireciona para o checkout do Mercado Pago
+                window.location.href = dados.checkout_url;
+                return;
+              }
+
+              // ── Evento GRATUITO: inscrição direta ────────────────────────
+              btnInscrever.textContent = "Inscrevendo...";
               await apiFetch("/api/inscricoes", {
                 method: "POST",
                 body: JSON.stringify({ eventoId: e.id }),
@@ -223,14 +241,14 @@
                 .replace("bg-blue-600 hover:bg-blue-700", "bg-green-600");
 
             } catch (erro) {
-              if (erro.message.includes("já está inscrito")) {
+              if (erro.message.includes("já está inscrito") || erro.message.includes("confirmado")) {
                 btnInscrever.textContent = "✅ Você já está inscrito";
                 btnInscrever.className = btnInscrever.className
                   .replace("bg-blue-600 hover:bg-blue-700", "bg-green-600");
               } else {
                 mostrarToast(`❌ ${erro.message}`, "erro");
                 btnInscrever.disabled = false;
-                btnInscrever.textContent = "🎟️ Inscrever-se neste evento";
+                btnInscrever.textContent = e.preco != null ? "💳 Pagar e garantir vaga" : "🎟️ Inscrever-se neste evento";
               }
             }
           });

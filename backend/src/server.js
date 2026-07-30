@@ -6,9 +6,10 @@ const cors = require("cors");
 const helmet = require("helmet");
 const session = require("express-session");
 
-const publicRoutes = require("./routes/public");
-const adminRoutes = require("./routes/admin");
-const ensureAdmin = require("./ensureAdmin");
+const publicRoutes    = require("./routes/public");
+const adminRoutes     = require("./routes/admin");
+const pagamentosRoutes = require("./routes/pagamentos");
+const ensureAdmin     = require("./ensureAdmin");
 
 const app = express();
 
@@ -80,6 +81,7 @@ app.set("views", path.join(__dirname, "views"));
 
 // ─── Rotas ────────────────────────────────────────────────────────────────────
 app.use("/api", publicRoutes);
+app.use("/api/pagamentos", pagamentosRoutes);
 app.use("/admin", adminRoutes);
 
 app.get("/", (req, res) => {
