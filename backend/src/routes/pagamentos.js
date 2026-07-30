@@ -1,9 +1,42 @@
 const express = require("express");
 const crypto  = require("crypto");
-const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
+const https   = require("https");
+const { MercadoPagoConfig, Payment } = require("mercadopago");
 const prisma = require("../prisma");
 const asyncHandler = require("../asyncHandler");
 const { requireUser } = require("../middleware/auth");
+
+// ─── Requisição direta à API do MP (sem SDK) ──────────────────────────────────
+// O SDK v3 adiciona headers/campos extras que disparam a policy PA_UNAUTHORIZED.
+// Usamos https nativo para enviar exatamente o que a API espera.
+function mpPost(path, body, token) {
+  return new Promise((resolve, reject) => {
+    const data = JSON.stringify(body);
+    const req = https.request(
+      {
+        hostname: "api.mercadopago.com",
+        path,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+          "Content-Length": Buffer.byteLength(data),
+        },
+      },
+      (res) => {
+        let buf = "";
+        res.on("data", (c) => { buf += c; });
+        res.on("end", () => {
+          try { resolve({ status: res.statusCode, body: JSON.parse(buf) }); }
+          catch { resolve({ status: res.statusCode, body: buf }); }
+        });
+      }
+    );
+    req.on("error", reject);
+    req.write(data);
+    req.end();
+  });
+}
 
 // ─── Valida assinatura do webhook do Mercado Pago ─────────────────────────────
 // O MP envia o header "x-signature" com ts= e v1= para provar que a notificação
@@ -35,8 +68,7 @@ function validarAssinaturaMP(req) {
 
 const router = express.Router();
 
-// ─── Inicializa o cliente do Mercado Pago ─────────────────────────────────────
-// MP_ACCESS_TOKEN: começa com "TEST-" para testes, "APP_USR-" para produção
+// ─── Cliente MP (usado apenas para webhook/payment.get) ───────────────────────
 const mpClient = new MercadoPagoConfig({
   accessToken: process.env.MP_ACCESS_TOKEN || "",
 });
@@ -122,37 +154,38 @@ router.post(
     }
     // se for "pendente", mantém como está e recria só a preferência
 
-    // ── Cria a preferência no Mercado Pago ────────────────────────────────────
+    // ── Cria a preferência no Mercado Pago (requisição direta, sem SDK) ─────────
     const frontendUrl = process.env.FRONTEND_URL || "http://localhost:8080";
     const backendUrl  = process.env.BACKEND_URL  || "https://apieventos.pedroremigio.com.br";
+    const token       = process.env.MP_ACCESS_TOKEN;
 
-    const preference = new Preference(mpClient);
-
-    const preferenceData = await preference.create({
-      body: {
-        items: [
-          {
-            id: String(evento.id),
-            title: `Inscrição — ${evento.titulo}`,
-            quantity: 1,
-            unit_price: Number(evento.preco),
-            currency_id: "BRL",
-          },
-        ],
-        payer: {
-          email: usuario.email,
+    const mpResp = await mpPost("/checkout/preferences", {
+      items: [
+        {
+          id: String(evento.id),
+          title: `Inscrição — ${evento.titulo}`,
+          quantity: 1,
+          unit_price: Number(evento.preco),
+          currency_id: "BRL",
         },
-        back_urls: {
-          success: `${frontendUrl}/pagamento-sucesso.html`,
-          failure: `${frontendUrl}/pagamento-falha.html`,
-          pending: `${frontendUrl}/pagamento-sucesso.html`,
-        },
-        auto_return: "approved",
-        external_reference: String(inscricao.id),
-        notification_url: `${backendUrl}/api/pagamentos/webhook`,
+      ],
+      payer: { email: usuario.email },
+      back_urls: {
+        success: `${frontendUrl}/pagamento-sucesso.html`,
+        failure: `${frontendUrl}/pagamento-falha.html`,
+        pending: `${frontendUrl}/pagamento-sucesso.html`,
       },
-    });
+      auto_return: "approved",
+      external_reference: String(inscricao.id),
+      notification_url: `${backendUrl}/api/pagamentos/webhook`,
+    }, token);
 
+    if (mpResp.status !== 201) {
+      console.error("[MP] Erro ao criar preferência:", JSON.stringify(mpResp.body));
+      return res.status(500).json({ erro: "Erro ao criar pagamento. Tente novamente." });
+    }
+
+    const preferenceData = mpResp.body;
     console.log(`[MP] Preferência criada: ${preferenceData.id} → inscrição ${inscricao.id}`);
 
     res.json({
