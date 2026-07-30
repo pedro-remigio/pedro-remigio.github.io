@@ -18,147 +18,123 @@
   >
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/header.js"></script>
 
 </head>
 
 <body class="bg-gray-100 text-gray-800">
 
-  <!-- HEADER -->
-  <header class="bg-black text-white fixed top-0 w-full z-50 shadow-lg">
-
-    <!-- MENU PRINCIPAL -->
-    <nav class="container mx-auto flex items-center justify-between p-4">
-
-      <!-- LOGO -->
-      <div class="flex items-center gap-3">
-
-        <img
-          src="./assets/images/logo.png"
-          alt="Logo Remigio Eventos"
-          class="w-12 h-12 rounded-full object-cover"
-        >
-
-        <h1 class="font-bold text-xl">
-          Remigio Eventos
-        </h1>
-
-      </div>
-
-      <!-- MENU DESKTOP -->
-      <ul class="hidden md:flex gap-6">
-
-        <li>
-          <a
-            href="index.html"
-            class="hover:text-blue-400 transition"
-          >
-            Home
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="eventos.html"
-            class="hover:text-blue-400 transition"
-          >
-            Eventos
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="#"
-            id="link-sair"
-            class="hover:text-blue-400 transition"
-          >
-            Sair
-          </a>
-        </li>
-
-      </ul>
-
-      <!-- BOTÃO MOBILE -->
-      <button
-        id="menu-button"
-        class="md:hidden bg-gray-900 hover:bg-blue-600 transition px-4 py-2 rounded-lg text-2xl shadow-lg"
-      >
-        ☰
-      </button>
-
-    </nav>
-
-    <!-- MENU MOBILE -->
-    <div
-      id="mobile-menu"
-      class="hidden md:hidden bg-black px-5 pb-6 pt-2 shadow-2xl"
-    >
-
-      <div class="flex flex-col gap-4">
-
-        <a
-          href="index.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          🏠 Home
-        </a>
-
-        <a
-          href="eventos.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          🎟️ Eventos
-        </a>
-
-        <a
-          href="#"
-          id="link-sair-mobile"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          🚪 Sair
-        </a>
-
-      </div>
-
-    </div>
-
-  </header>
+  <!-- HEADER compartilhado (gerado por js/header.js) -->
+  <div id="header-root"></div>
 
   <!-- MAIN -->
-  <main class="container mx-auto pt-44 pb-16 px-6">
+  <main class="container mx-auto pt-32 pb-16 px-6">
 
     <section class="bg-white p-8 rounded-xl shadow-lg max-w-3xl mx-auto">
 
-      <h2 class="text-4xl font-bold mb-2">
-        Área do Usuário
-      </h2>
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-4xl font-bold">Área do Usuário</h2>
+        <a href="#" id="link-sair" class="text-sm text-gray-400 hover:text-red-600 transition font-semibold">🚪 Sair</a>
+      </div>
 
       <p id="saudacao" class="text-lg text-gray-600 mb-8">
-        Olá!
+        Carregando...
       </p>
 
-      <!-- EVENTOS INSCRITOS -->
-      <div class="mb-8">
+      <!-- PRÓXIMOS EVENTOS INSCRITOS -->
+      <div class="mb-10">
 
-        <h3 class="text-2xl font-bold mb-4">
-          Meus Eventos
-        </h3>
+        <h3 class="text-2xl font-bold mb-4">Meus Próximos Eventos</h3>
 
-        <p class="bg-gray-100 rounded-lg p-4 text-gray-700">
-          Você não está inscrito em nenhum evento no momento.
-        </p>
+        <div id="proximos-eventos">
+          <p class="bg-gray-100 rounded-lg p-4 text-gray-500">Carregando...</p>
+        </div>
 
       </div>
 
-      <!-- HISTÓRICO -->
-      <div>
+      <!-- HISTÓRICO (EVENTOS ENCERRADOS) -->
+      <div class="mb-10">
 
-        <h3 class="text-2xl font-bold mb-4">
-          Histórico de Eventos
-        </h3>
+        <h3 class="text-2xl font-bold mb-4">Histórico de Eventos</h3>
 
-        <p class="bg-gray-100 rounded-lg p-4 text-gray-700">
-          Não existe registro de eventos anteriores no seu nome.
+        <div id="historico-eventos">
+          <p class="bg-gray-100 rounded-lg p-4 text-gray-500">Carregando...</p>
+        </div>
+
+      </div>
+
+      <!-- EDITAR PERFIL -->
+      <div class="border-t border-gray-200 pt-8 mb-8">
+
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-2xl font-bold">Meus Dados</h3>
+          <button
+            id="btn-toggle-editar"
+            onclick="toggleFormEditar()"
+            class="text-sm text-blue-600 hover:underline font-semibold"
+          >
+            ✏️ Editar nome / telefone
+          </button>
+        </div>
+
+        <!-- Dados atuais (modo visualização) -->
+        <div id="dados-atuais" class="bg-gray-50 rounded-xl p-4 space-y-2 text-sm text-gray-700">
+          <p>Carregando...</p>
+        </div>
+
+        <!-- Formulário de edição (oculto por padrão) -->
+        <form id="form-editar-perfil" class="hidden mt-4 space-y-4">
+
+          <div>
+            <label for="edit-nome" class="block mb-1 font-semibold text-sm">
+              Nome completo <span class="text-red-600">*</span>
+            </label>
+            <input type="text" id="edit-nome" required
+              class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+          </div>
+
+          <div>
+            <label for="edit-telefone" class="block mb-1 font-semibold text-sm">
+              Telefone / WhatsApp <span class="text-red-600">*</span>
+            </label>
+            <input type="tel" id="edit-telefone" required placeholder="+55 82 9 9655-8114"
+              class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm">
+          </div>
+
+          <div class="flex gap-3">
+            <button type="submit" id="btn-salvar-perfil"
+              class="bg-blue-600 hover:bg-blue-700 transition text-white px-5 py-2 rounded-lg font-semibold text-sm disabled:opacity-50">
+              Salvar alterações
+            </button>
+            <button type="button" onclick="toggleFormEditar()"
+              class="bg-gray-100 hover:bg-gray-200 transition text-gray-700 px-5 py-2 rounded-lg font-semibold text-sm">
+              Cancelar
+            </button>
+          </div>
+
+          <p id="editar-feedback" class="hidden text-sm font-semibold"></p>
+
+        </form>
+
+      </div>
+
+      <!-- DADOS SENSÍVEIS (email / documento) -->
+      <div class="border-t border-gray-200 pt-8">
+
+        <h3 class="text-2xl font-bold mb-2">Alterar Email ou Documento</h3>
+        <p class="text-sm text-gray-500 mb-4">
+          Por segurança, alterações de e-mail e CPF/passaporte precisam ser
+          revisadas pela nossa equipe. Clique abaixo para abrir uma solicitação —
+          o formulário já vem pré-preenchido com seus dados.
         </p>
+
+        <button
+          onclick="abrirSolicitacaoDadosSensiveis()"
+          class="inline-flex items-center gap-2 bg-gray-800 hover:bg-gray-900 transition text-white px-5 py-3 rounded-lg font-semibold text-sm"
+        >
+          📋 Solicitar alteração de dados sensíveis
+        </button>
 
       </div>
 
@@ -168,44 +144,259 @@
 
   <script>
 
-    // MENU MOBILE
-    const menuButton = document.getElementById("menu-button");
+    // Menu mobile gerenciado por js/header.js
 
-    const mobileMenu = document.getElementById("mobile-menu");
-
-    menuButton.addEventListener("click", () => {
-
-      mobileMenu.classList.toggle("hidden");
-
-    });
-
-    // USUÁRIO LOGADO
-    const usuario = JSON.parse(sessionStorage.getItem("usuario"));
-
-    if (!usuario) {
-
-      window.location.href = "login.html";
-
-    } else {
-
-      document.getElementById("saudacao").textContent = `Olá, ${usuario.nome}!`;
-
-    }
-
-    // SAIR
-    function sair(event) {
-
+    // LOGOUT — chama a API para destruir a sessão no servidor
+    async function sair(event) {
       event.preventDefault();
-
+      try {
+        await apiFetch("/api/usuarios/logout", { method: "POST" });
+      } catch {}
       sessionStorage.removeItem("usuario");
-
       window.location.href = "login.html";
-
     }
 
     document.getElementById("link-sair").addEventListener("click", sair);
 
-    document.getElementById("link-sair-mobile").addEventListener("click", sair);
+    // Formata data para exibição
+    function formatarData(dataStr) {
+      return new Date(dataStr).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+    }
+
+    // Renderiza um card de inscrição
+    function renderizarCard(inscricao) {
+      const { evento, id: inscricaoId } = inscricao;
+      const encerrado = evento.status === "encerrado";
+
+      const dataEvento = new Date(evento.data);
+      const jaOcorreu  = dataEvento < new Date();
+
+      const botaoCertificado = encerrado
+        ? `<a
+             href="${API_URL}/api/certificado/${inscricaoId}"
+             target="_blank"
+             class="inline-block bg-green-600 hover:bg-green-700 transition text-white px-4 py-2 rounded-lg text-sm font-semibold mt-3"
+           >
+             🏆 Baixar Certificado
+           </a>`
+        : jaOcorreu
+        ? `<span class="inline-block bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-xs font-semibold mt-3">
+             ✅ Participação registrada
+           </span>`
+        : `<div class="flex items-center gap-3 mt-3 flex-wrap">
+             <span class="inline-block bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
+               ✅ Inscrição confirmada
+             </span>
+             <button
+               onclick="cancelarInscricao(${inscricaoId}, '${evento.titulo.replace(/'/g, "\\'")}')"
+               class="text-xs text-red-500 hover:text-red-700 hover:underline transition"
+             >
+               Cancelar inscrição
+             </button>
+           </div>`;
+
+      const imagemHtml = evento.imagem
+        ? `<img src="${evento.imagem}" alt="${evento.titulo}" class="w-20 h-20 object-cover rounded-lg flex-shrink-0">`
+        : "";
+
+      const precoHtml = evento.preco != null
+        ? `<p class="text-sm text-blue-700 font-semibold">💰 R$ ${evento.preco.toFixed(2).replace(".", ",")}</p>`
+        : `<p class="text-sm text-green-700 font-semibold">💰 Gratuito</p>`;
+
+      return `
+        <div class="border border-gray-200 rounded-xl p-4 mb-3 flex gap-4 items-start">
+          ${imagemHtml}
+          <div>
+            <h4 class="font-bold text-lg">${evento.titulo}</h4>
+            <p class="text-gray-500 text-sm">📍 ${evento.local}</p>
+            <p class="text-gray-500 text-sm">📅 ${formatarData(evento.data)}</p>
+            ${precoHtml}
+            ${botaoCertificado}
+          </div>
+        </div>
+      `;
+    }
+
+    // ─── EDITAR PERFIL ────────────────────────────────────────────────────────
+
+    let dadosUsuarioAtual = null; // guarda os dados carregados para usar no formulário
+
+    function toggleFormEditar() {
+      const form  = document.getElementById("form-editar-perfil");
+      const dados = document.getElementById("dados-atuais");
+      const aberto = !form.classList.contains("hidden");
+
+      if (aberto) {
+        form.classList.add("hidden");
+        dados.classList.remove("hidden");
+        document.getElementById("editar-feedback").classList.add("hidden");
+      } else {
+        // Pré-preenche o formulário com os dados atuais
+        if (dadosUsuarioAtual) {
+          document.getElementById("edit-nome").value     = dadosUsuarioAtual.nome     || "";
+          document.getElementById("edit-telefone").value = dadosUsuarioAtual.telefone || "";
+        }
+        form.classList.remove("hidden");
+        dados.classList.add("hidden");
+      }
+    }
+
+    document.getElementById("form-editar-perfil").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const btn      = document.getElementById("btn-salvar-perfil");
+      const feedback = document.getElementById("editar-feedback");
+
+      feedback.classList.add("hidden");
+      btn.disabled = true;
+      btn.textContent = "Salvando...";
+
+      const nome     = document.getElementById("edit-nome").value.trim();
+      const telefone = document.getElementById("edit-telefone").value.trim();
+
+      try {
+        const resultado = await apiFetch("/api/usuarios/me", {
+          method: "PATCH",
+          body: JSON.stringify({ nome, telefone }),
+        });
+
+        // Atualiza os dados locais
+        dadosUsuarioAtual = resultado.usuario;
+        sessionStorage.setItem("usuario", JSON.stringify(resultado.usuario));
+
+        // Atualiza a exibição
+        atualizarDadosVisuais(resultado.usuario);
+        document.getElementById("saudacao").textContent = `Olá, ${resultado.usuario.nome}!`;
+
+        // Atualiza o nome no header (nav-usuario)
+        const navUsuario = document.getElementById("nav-usuario");
+        if (navUsuario) {
+          navUsuario.innerHTML = `<a href="area-usuario.html" class="hover:text-blue-400 transition">Olá, ${resultado.usuario.nome.split(" ")[0]}</a>`;
+        }
+
+        feedback.textContent = "✅ Dados atualizados com sucesso!";
+        feedback.className   = "text-sm font-semibold text-green-600";
+        feedback.classList.remove("hidden");
+
+        // Fecha o form após 1.5 s
+        setTimeout(toggleFormEditar, 1500);
+
+      } catch (erro) {
+        feedback.textContent = `❌ ${erro.message}`;
+        feedback.className   = "text-sm font-semibold text-red-600";
+        feedback.classList.remove("hidden");
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Salvar alterações";
+      }
+    });
+
+    function atualizarDadosVisuais(usuario) {
+      const tipoDoc = usuario.tipoDocumento === "passaporte" ? "Passaporte" : "CPF";
+      const doc     = usuario.cpf
+        ? (usuario.tipoDocumento === "cpf"
+            ? usuario.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")
+            : usuario.cpf)
+        : "—";
+
+      document.getElementById("dados-atuais").innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <div><span class="text-gray-400">Nome:</span> <strong>${usuario.nome}</strong></div>
+          <div><span class="text-gray-400">Email:</span> <strong>${usuario.email}</strong></div>
+          <div><span class="text-gray-400">Telefone:</span> <strong>${usuario.telefone || "—"}</strong></div>
+          <div><span class="text-gray-400">${tipoDoc}:</span> <strong>${doc}</strong></div>
+        </div>
+      `;
+    }
+
+    // ─── SOLICITAÇÃO DE DADOS SENSÍVEIS ──────────────────────────────────────
+
+    function abrirSolicitacaoDadosSensiveis() {
+      if (!dadosUsuarioAtual) return;
+      const params = new URLSearchParams({
+        nome:    dadosUsuarioAtual.nome,
+        email:   dadosUsuarioAtual.email,
+        evento:  "Alteração de dados sensíveis (email/documento)",
+        assunto: "sensivel",
+      });
+      window.location.href = `contato.html?${params.toString()}`;
+    }
+
+    // ─── CARREGAMENTO PRINCIPAL ───────────────────────────────────────────────
+
+    // Carrega dados do usuário e inscrições da API
+    async function carregarAreaUsuario() {
+
+      // verificarSessao() chama GET /api/usuarios/me com o cookie de sessão
+      const sessao = await verificarSessao();
+
+      if (!sessao) {
+        // Sessão inválida ou expirada: limpa cache e volta para login
+        sessionStorage.removeItem("usuario");
+        window.location.href = "login.html";
+        return;
+      }
+
+      const { usuario } = sessao;
+
+      // Atualiza cache local e exibe saudação
+      dadosUsuarioAtual = usuario;
+      sessionStorage.setItem("usuario", JSON.stringify(usuario));
+      document.getElementById("saudacao").textContent = `Olá, ${usuario.nome}!`;
+      atualizarDadosVisuais(usuario);
+
+      try {
+        const dados = await apiFetch("/api/usuarios/me/inscricoes");
+        const inscricoes = dados.inscricoes;
+
+        const proximos = inscricoes.filter((i) => i.evento.status === "ativo");
+        const historico = inscricoes.filter((i) => i.evento.status !== "ativo");
+
+        // Próximos eventos
+        const proximosDiv = document.getElementById("proximos-eventos");
+        if (proximos.length === 0) {
+          proximosDiv.innerHTML = `
+            <p class="bg-gray-100 rounded-lg p-4 text-gray-600">
+              Você não está inscrito em nenhum evento próximo.
+              <a href="eventos.html" class="text-blue-600 hover:underline font-semibold">Ver eventos disponíveis →</a>
+            </p>`;
+        } else {
+          proximosDiv.innerHTML = proximos.map(renderizarCard).join("");
+        }
+
+        // Histórico
+        const historicoDiv = document.getElementById("historico-eventos");
+        if (historico.length === 0) {
+          historicoDiv.innerHTML = `<p class="bg-gray-100 rounded-lg p-4 text-gray-500">Nenhum evento anterior registrado.</p>`;
+        } else {
+          historicoDiv.innerHTML = historico.map(renderizarCard).join("");
+        }
+
+      } catch {
+        document.getElementById("proximos-eventos").innerHTML =
+          `<p class="text-red-500 p-4">Não foi possível carregar suas inscrições. Tente recarregar a página.</p>`;
+        document.getElementById("historico-eventos").innerHTML = "";
+      }
+    }
+
+    // Cancela inscrição em evento futuro
+    async function cancelarInscricao(inscricaoId, titulo) {
+      if (!confirm(`Tem certeza que deseja cancelar sua inscrição em "${titulo}"?`)) return;
+
+      try {
+        await apiFetch(`/api/inscricoes/${inscricaoId}`, { method: "DELETE" });
+        alert(`Inscrição em "${titulo}" cancelada com sucesso.`);
+        carregarAreaUsuario(); // recarrega a lista
+      } catch (erro) {
+        alert(`❌ ${erro.message}`);
+      }
+    }
+
+    carregarAreaUsuario();
 
   </script>
 

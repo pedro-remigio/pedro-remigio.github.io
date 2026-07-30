@@ -1,0 +1,19 @@
+# .dockerignore para o build do Dockerfile.nginx (frontend)
+# Exclui tudo que não é necessário para o frontend
+
+# Backend completo (tem node_modules, .env, etc.)
+backend/
+
+# Controle de versão
+.git/
+.gitignore
+
+# Documentação e configs de desenvolvimento
+*.md
+serve.json
+.vscode/
+.idea/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db

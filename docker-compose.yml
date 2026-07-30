@@ -1,0 +1,50 @@
+services:
+
+  # ─── Banco de Dados ──────────────────────────────────────────────────────────
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB:       ${POSTGRES_DB:-remigio_eventos}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  # ─── Backend Node.js ─────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      DATABASE_URL:    postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@db:5432/${POSTGRES_DB:-remigio_eventos}?schema=public
+      PORT:            3000
+      SESSION_SECRET:  ${SESSION_SECRET:-chave-secreta-docker-troque-isso}
+      ADMIN_EMAIL:     ${ADMIN_EMAIL:-admin@remigioeventos.com}
+      ADMIN_PASSWORD:  ${ADMIN_PASSWORD:-Oxetech2026}
+      FRONTEND_URL:    ""
+      NODE_ENV:        development
+    depends_on:
+      db:
+        condition: service_healthy
+
+  # ─── Frontend nginx ──────────────────────────────────────────────────────────
+  # Serve os arquivos HTML/JS/assets e faz proxy de /api/ e /admin → backend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:

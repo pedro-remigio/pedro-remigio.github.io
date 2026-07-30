@@ -18,152 +18,15 @@
   >
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/header.js"></script>
 
 </head>
 
 <body class="bg-gray-100 text-gray-800">
 
-  <!-- HEADER -->
-  <header class="bg-black text-white fixed top-0 w-full z-50 shadow-lg">
-
-    <!-- MENU PRINCIPAL -->
-    <nav class="container mx-auto flex items-center justify-between p-4">
-
-      <!-- LOGO -->
-      <div class="flex items-center gap-3">
-
-        <img
-          src="./assets/images/logo.png"
-          alt="Logo Remigio Eventos"
-          class="w-12 h-12 rounded-full object-cover"
-        >
-
-        <h1 class="font-bold text-xl">
-          Remigio Eventos
-        </h1>
-
-      </div>
-
-      <!-- MENU DESKTOP -->
-      <ul class="hidden md:flex gap-6">
-
-        <li>
-          <a
-            href="index.html"
-            class="hover:text-blue-400 transition"
-          >
-            Home
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="quem-somos.html"
-            class="hover:text-blue-400 transition"
-          >
-            Quem Somos
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="eventos.html"
-            class="hover:text-blue-400 transition"
-          >
-            Eventos
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="contato.html"
-            class="hover:text-blue-400 transition"
-          >
-            Contato
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="cadastro.html"
-            class="hover:text-blue-400 transition"
-          >
-            Cadastro
-          </a>
-        </li>
-
-      </ul>
-
-      <!-- BOTÃO MOBILE -->
-      <button
-        id="menu-button"
-        class="md:hidden bg-gray-900 hover:bg-blue-600 transition px-4 py-2 rounded-lg text-2xl shadow-lg"
-      >
-        ☰
-      </button>
-
-    </nav>
-
-    <!-- MENU MOBILE -->
-    <div
-      id="mobile-menu"
-      class="hidden md:hidden bg-black px-5 pb-6 pt-2 shadow-2xl"
-    >
-
-      <div class="flex flex-col gap-4">
-
-        <a
-          href="index.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          🏠 Home
-        </a>
-
-        <a
-          href="quem-somos.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          👥 Quem Somos
-        </a>
-
-        <a
-          href="eventos.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          🎟️ Eventos
-        </a>
-
-        <a
-          href="contato.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          📞 Contato
-        </a>
-
-        <a
-          href="cadastro.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          📝 Cadastro
-        </a>
-
-      </div>
-
-    </div>
-
-    <!-- VOLTAR -->
-    <div class="bg-gray-900 px-6 py-3 flex justify-end">
-
-      <a
-        href="index.html"
-        class="bg-black hover:bg-blue-600 transition px-4 py-2 rounded-lg shadow-lg"
-      >
-        ← Voltar
-      </a>
-
-    </div>
-
-  </header>
+  <!-- HEADER compartilhado (gerado por js/header.js) -->
+  <div id="header-root" data-voltar="index.html"></div>
 
   <!-- MAIN -->
   <main class="container mx-auto pt-44 pb-16 px-6">
@@ -222,14 +85,16 @@
 
         </div>
 
-        <!-- BOTÃO -->
-        <button
-          type="submit"
-          id="botao-enviar"
-          class="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-lg font-semibold w-full md:w-auto disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          Entrar
-        </button>
+        <div class="flex items-center justify-between">
+          <button
+            type="submit"
+            id="botao-enviar"
+            class="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Entrar
+          </button>
+          <a href="esqueci-senha.html" class="text-sm text-blue-600 hover:underline">Esqueci minha senha</a>
+        </div>
 
       </form>
 
@@ -259,42 +124,13 @@
 
   <script>
 
-    // MENU MOBILE
-    const menuButton = document.getElementById("menu-button");
-
-    const mobileMenu = document.getElementById("mobile-menu");
-
-    menuButton.addEventListener("click", () => {
-
-      mobileMenu.classList.toggle("hidden");
-
-    });
-
     // FORMULÁRIO
-    const API_URL = "https://remigio-eventos-backend.onrender.com";
-
-    function mensagemErroHttp(status) {
-
-      const mensagens = {
-        400: "Dados inválidos. Verifique os campos e tente novamente.",
-        401: "E-mail ou senha inválidos (401).",
-        404: "Recurso não encontrado (404).",
-        408: "Tempo de espera esgotado (408). Tente novamente.",
-        500: "Erro interno do servidor (500).",
-        502: "Servidor indisponível no momento (502).",
-        503: "Servidor indisponível no momento (503).",
-      };
-
-      return mensagens[status] || `Ocorreu um erro inesperado (${status}).`;
-
-    }
+    // Menu mobile gerenciado por js/header.js
+    // API_URL e apiFetch vêm de js/api.js (carregado no <head>)
 
     const formLogin = document.getElementById("form-login");
-
     const mensagemSucesso = document.getElementById("mensagem-sucesso");
-
     const mensagemErro = document.getElementById("mensagem-erro");
-
     const botaoEnviar = document.getElementById("botao-enviar");
 
     formLogin.addEventListener("submit", async (event) => {
@@ -304,7 +140,6 @@
       if (botaoEnviar.disabled) return;
 
       mensagemSucesso.classList.add("hidden");
-
       mensagemErro.classList.add("hidden");
 
       const dados = {
@@ -313,59 +148,36 @@
       };
 
       botaoEnviar.disabled = true;
-
       botaoEnviar.textContent = "Entrando...";
 
       try {
 
-        const resposta = await fetch(`${API_URL}/api/usuarios/login`, {
+        // apiFetch já envia credentials: "include" (cookie de sessão)
+        const resultado = await apiFetch("/api/usuarios/login", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dados),
         });
 
-        if (!resposta.ok) {
+        // Salva nome para exibir no front sem precisar buscar na API toda hora
+        sessionStorage.setItem("usuario", JSON.stringify(resultado.usuario));
 
-          let resultado = {};
-
-          try {
-            resultado = await resposta.json();
-          } catch (_erroJson) {}
-
-          mensagemErro.textContent = `❌ ${resultado.erro || mensagemErroHttp(resposta.status)}`;
-
-          mensagemErro.classList.remove("hidden");
-
-          return;
-
-        }
-
-        const resultado = await resposta.json();
-
-        mensagemSucesso.textContent = `✅ Bem-vindo(a), ${resultado.nome}!`;
-
+        mensagemSucesso.textContent = `✅ Bem-vindo(a), ${resultado.usuario.nome}!`;
         mensagemSucesso.classList.remove("hidden");
 
         formLogin.reset();
 
-        sessionStorage.setItem("usuario", JSON.stringify(resultado));
-
         setTimeout(() => {
-
           window.location.href = "area-usuario.html";
-
         }, 1200);
 
       } catch (erro) {
 
-        mensagemErro.textContent = "❌ Não foi possível conectar. Tente novamente em instantes.";
-
+        mensagemErro.textContent = `❌ ${erro.message}`;
         mensagemErro.classList.remove("hidden");
 
       } finally {
 
         botaoEnviar.disabled = false;
-
         botaoEnviar.textContent = "Entrar";
 
       }

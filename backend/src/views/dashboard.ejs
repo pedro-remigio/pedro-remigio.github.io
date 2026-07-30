@@ -10,17 +10,132 @@
 
   <header class="bg-black text-white shadow-lg">
     <div class="container mx-auto flex items-center justify-between p-4">
-      <h1 class="font-bold text-xl">Painel do Administrador - Remigio Eventos</h1>
+      <h1 class="font-bold text-xl">Painel do Administrador — Remigio Eventos</h1>
       <a href="/admin/logout" class="bg-gray-900 hover:bg-red-600 transition px-4 py-2 rounded-lg">Sair</a>
     </div>
   </header>
 
   <main class="container mx-auto py-10 px-6 space-y-12">
 
+    <!-- RESUMO -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white rounded-xl shadow p-6 text-center">
+        <p class="text-3xl font-bold text-blue-600"><%= eventos.length %></p>
+        <p class="text-gray-600 mt-1">Eventos</p>
+      </div>
+      <div class="bg-white rounded-xl shadow p-6 text-center">
+        <p class="text-3xl font-bold text-green-600"><%= inscricoes.length %></p>
+        <p class="text-gray-600 mt-1">Inscrições</p>
+      </div>
+      <div class="bg-white rounded-xl shadow p-6 text-center">
+        <p class="text-3xl font-bold text-purple-600"><%= usuarios.length %></p>
+        <p class="text-gray-600 mt-1">Usuários</p>
+      </div>
+      <div class="bg-white rounded-xl shadow p-6 text-center">
+        <p class="text-3xl font-bold text-orange-600"><%= leads.length %></p>
+        <p class="text-gray-600 mt-1">Mensagens</p>
+      </div>
+    </section>
+
+    <!-- EVENTOS -->
     <section>
-      <h2 class="text-2xl font-bold mb-4">
-        Leads (formulário de contato) — <%= leads.length %>
-      </h2>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-2xl font-bold">Eventos — <%= eventos.length %></h2>
+        <a href="/admin/eventos/novo" class="bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-2 rounded-lg font-semibold">+ Novo Evento</a>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-lg overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-gray-900 text-white">
+            <tr>
+              <th class="p-3">Título</th>
+              <th class="p-3">Data</th>
+              <th class="p-3">Local</th>
+              <th class="p-3">Vagas</th>
+              <th class="p-3">Preço</th>
+              <th class="p-3">Status</th>
+              <th class="p-3">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (eventos.length === 0) { %>
+              <tr><td class="p-3 text-gray-500" colspan="6">Nenhum evento cadastrado ainda.</td></tr>
+            <% } %>
+            <% eventos.forEach((evento) => { %>
+              <tr class="border-t border-gray-200">
+                <td class="p-3 font-semibold">
+                  <a href="/admin/eventos/<%= evento.id %>/relatorio"
+                    class="hover:text-blue-600 hover:underline transition">
+                    <%= evento.titulo %>
+                  </a>
+                </td>
+                <td class="p-3"><%= new Date(evento.data).toLocaleDateString("pt-BR") %></td>
+                <td class="p-3"><%= evento.local %></td>
+                <td class="p-3"><%= evento.capacidade %></td>
+                <td class="p-3"><%= evento.preco != null ? "R$ " + evento.preco.toFixed(2) : "Gratuito" %></td>
+                <td class="p-3">
+                  <span class="px-2 py-1 rounded-full text-xs font-semibold
+                    <%= evento.status === 'ativo' ? 'bg-green-100 text-green-700' : evento.status === 'encerrado' ? 'bg-gray-200 text-gray-600' : 'bg-red-100 text-red-600' %>">
+                    <%= evento.status %>
+                  </span>
+                </td>
+                <td class="p-3 flex gap-2 flex-wrap">
+                  <a href="/admin/eventos/<%= evento.id %>/relatorio" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">Relatório</a>
+                  <a href="/admin/eventos/<%= evento.id %>/editar" class="bg-yellow-400 hover:bg-yellow-500 text-black px-3 py-1 rounded text-sm">Editar</a>
+                  <form method="POST" action="/admin/eventos/<%= evento.id %>/deletar" onsubmit="return confirm('Deletar este evento e todas as suas inscrições?')">
+                    <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">Deletar</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- INSCRIÇÕES -->
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Inscrições — <%= inscricoes.length %></h2>
+
+      <div class="bg-white rounded-xl shadow-lg overflow-x-auto">
+        <table class="w-full text-left">
+          <thead class="bg-gray-900 text-white">
+            <tr>
+              <th class="p-3">Usuário</th>
+              <th class="p-3">Email</th>
+              <th class="p-3">Evento</th>
+              <th class="p-3">Status</th>
+              <th class="p-3">Data da Inscrição</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (inscricoes.length === 0) { %>
+              <tr><td class="p-3 text-gray-500" colspan="4">Nenhuma inscrição ainda.</td></tr>
+            <% } %>
+            <% inscricoes.forEach((ins) => { %>
+              <tr class="border-t border-gray-200">
+                <td class="p-3"><%= ins.usuario.nome %></td>
+                <td class="p-3"><%= ins.usuario.email %></td>
+                <td class="p-3"><%= ins.evento.titulo %></td>
+                <td class="p-3">
+                  <span class="px-2 py-1 rounded-full text-xs font-semibold
+                    <%= ins.status === 'confirmada' ? 'bg-green-100 text-green-700' :
+                        ins.status === 'pendente'   ? 'bg-yellow-100 text-yellow-700' :
+                                                      'bg-gray-100 text-gray-500' %>">
+                    <%= ins.status %>
+                  </span>
+                </td>
+                <td class="p-3"><%= ins.createdAt.toLocaleString("pt-BR") %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MENSAGENS DE CONTATO -->
+    <section>
+      <h2 class="text-2xl font-bold mb-4">Mensagens de Contato — <%= leads.length %></h2>
 
       <div class="bg-white rounded-xl shadow-lg overflow-x-auto">
         <table class="w-full text-left">
@@ -35,7 +150,7 @@
           </thead>
           <tbody>
             <% if (leads.length === 0) { %>
-              <tr><td class="p-3 text-gray-500" colspan="5">Nenhum lead cadastrado ainda.</td></tr>
+              <tr><td class="p-3 text-gray-500" colspan="5">Nenhuma mensagem ainda.</td></tr>
             <% } %>
             <% leads.forEach((lead) => { %>
               <tr class="border-t border-gray-200">
@@ -51,10 +166,9 @@
       </div>
     </section>
 
+    <!-- USUÁRIOS -->
     <section>
-      <h2 class="text-2xl font-bold mb-4">
-        Usuários cadastrados — <%= usuarios.length %>
-      </h2>
+      <h2 class="text-2xl font-bold mb-4">Usuários Cadastrados — <%= usuarios.length %></h2>
 
       <div class="bg-white rounded-xl shadow-lg overflow-x-auto">
         <table class="w-full text-left">
@@ -63,7 +177,7 @@
               <th class="p-3">Nome</th>
               <th class="p-3">Email</th>
               <th class="p-3">CPF</th>
-              <th class="p-3">Data</th>
+              <th class="p-3">Data de Cadastro</th>
             </tr>
           </thead>
           <tbody>

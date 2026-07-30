@@ -7,11 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Registros vindos do formulário de contato/inscrição do site
+// Registros vindos do formulário de contato do site
 model Lead {
   id        Int      @id @default(autoincrement())
   nome      String
   email     String
+  telefone  String?  // WhatsApp/telefone do visitante
   evento    String?
   mensagem  String
   createdAt DateTime @default(now())
@@ -19,12 +20,27 @@ model Lead {
 
 // Usuários que criam conta no site (área do usuário)
 model Usuario {
+  id                Int                     @id @default(autoincrement())
+  nome              String
+  email             String                  @unique
+  cpf               String                  @unique // CPF ou nº de passaporte (estrangeiros)
+  tipoDocumento     String                  @default("cpf") // "cpf" | "passaporte"
+  telefone          String?
+  senha             String
+  createdAt         DateTime                @default(now())
+  inscricoes        Inscricao[]
+  tokensRedefinicao TokenRedefinicaoSenha[]
+}
+
+// Tokens temporários para redefinição de senha
+model TokenRedefinicaoSenha {
   id        Int      @id @default(autoincrement())
-  nome      String
-  email     String   @unique
-  cpf       String   @unique
-  senha     String
+  usuarioId Int
+  token     String   @unique
+  expiraEm  DateTime
+  usado     Boolean  @default(false)
   createdAt DateTime @default(now())
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 }
 
 // Login da área administrativa
@@ -32,4 +48,36 @@ model Admin {
   id    Int    @id @default(autoincrement())
   email String @unique
   senha String
+}
+
+// Eventos cadastrados no sistema
+model Evento {
+  id         Int         @id @default(autoincrement())
+  titulo     String
+  descricao  String
+  data       DateTime
+  local      String
+  capacidade Int         @default(100)
+  imagem     String?
+  preco      Float?      // null = gratuito; valor em reais para exibição (sem pagamento por enquanto)
+  status     String      @default("ativo") // ativo | encerrado | cancelado
+  createdAt  DateTime    @default(now())
+  inscricoes Inscricao[]
+}
+
+// Inscrições de usuários em eventos
+model Inscricao {
+  id          Int      @id @default(autoincrement())
+  usuarioId   Int
+  eventoId    Int
+  // confirmada = gratuito ou pagamento confirmado
+  // pendente   = aguardando confirmação de pagamento (Mercado Pago)
+  // cancelada  = pagamento cancelado ou inscrição removida
+  status      String   @default("confirmada")
+  pagamentoId String?  // ID da transação no Mercado Pago (null até integração ativa)
+  createdAt   DateTime @default(now())
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id])
+  evento      Evento   @relation(fields: [eventoId], references: [id])
+
+  @@unique([usuarioId, eventoId])
 }

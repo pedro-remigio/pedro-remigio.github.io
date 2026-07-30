@@ -1,0 +1,25 @@
+# Dependências — serão instaladas dentro da imagem via npm ci
+node_modules
+
+# Variáveis de ambiente locais (nunca entram na imagem)
+.env
+.env.*
+!.env.docker
+
+# Logs
+*.log
+npm-debug.log*
+
+# Banco de dados SQLite local (se houver)
+*.db
+*.sqlite
+
+# Arquivos do SO e IDE
+.DS_Store
+Thumbs.db
+.idea
+.vscode
+
+# Git
+.git
+.gitignore

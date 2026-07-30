@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Esqueci minha senha — Remigio Eventos</title>
+  <link rel="icon" type="image/png" href="./assets/images/logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/header.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- HEADER compartilhado (gerado por js/header.js) -->
+  <div id="header-root" data-voltar="login.html" data-voltar-texto="← Voltar para Login"></div>
+
+  <main class="container mx-auto pt-44 pb-16 px-6">
+    <section class="bg-white p-8 rounded-xl shadow-lg max-w-md mx-auto">
+
+      <div class="text-center mb-6">
+        <div class="text-5xl mb-3">🔑</div>
+        <h2 class="text-3xl font-bold">Esqueci minha senha</h2>
+        <p class="text-gray-500 mt-2">Informe seu email e enviaremos um link para redefinir sua senha.</p>
+      </div>
+
+      <form id="form-esqueci" class="space-y-5">
+
+        <div>
+          <label for="email" class="block mb-2 font-semibold">Email <span class="text-red-600">*</span></label>
+          <input type="email" id="email" required placeholder="seu@email.com"
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <button type="submit" id="botao-enviar"
+          class="bg-blue-600 hover:bg-blue-700 transition text-white py-3 rounded-lg font-semibold w-full disabled:opacity-50">
+          Enviar link de redefinição
+        </button>
+
+      </form>
+
+      <div id="feedback-sucesso" class="hidden mt-6 bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+        <p class="text-green-700 font-semibold">✅ Se esse email estiver cadastrado, você receberá um link em breve.</p>
+        <p class="text-sm text-gray-500 mt-2">Verifique sua caixa de entrada (e o spam).</p>
+      </div>
+
+      <div id="feedback-erro" class="hidden mt-6 bg-red-50 border border-red-200 rounded-lg p-4">
+        <p id="mensagem-erro" class="text-red-700 font-semibold"></p>
+      </div>
+
+      <p class="mt-6 text-center text-gray-600">
+        Lembrou a senha?
+        <a href="login.html" class="text-blue-600 hover:underline font-semibold">Fazer login</a>
+      </p>
+
+    </section>
+  </main>
+
+  <script>
+    document.getElementById("form-esqueci").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const botao = document.getElementById("botao-enviar");
+      const sucesso = document.getElementById("feedback-sucesso");
+      const erro    = document.getElementById("feedback-erro");
+      const msgErro = document.getElementById("mensagem-erro");
+
+      sucesso.classList.add("hidden");
+      erro.classList.add("hidden");
+
+      botao.disabled = true;
+      botao.textContent = "Enviando...";
+
+      try {
+        await apiFetch("/api/auth/esqueci-senha", {
+          method: "POST",
+          body: JSON.stringify({ email: document.getElementById("email").value }),
+        });
+        sucesso.classList.remove("hidden");
+        document.getElementById("form-esqueci").reset();
+      } catch (er) {
+        msgErro.textContent = `❌ ${er.message}`;
+        erro.classList.remove("hidden");
+      } finally {
+        botao.disabled = false;
+        botao.textContent = "Enviar link de redefinição";
+      }
+    });
+  </script>
+
+</body>
+</html>

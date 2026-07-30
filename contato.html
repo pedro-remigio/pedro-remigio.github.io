@@ -18,136 +18,15 @@
   >
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/header.js"></script>
 
 </head>
 
 <body class="bg-gray-100 text-gray-800">
 
-  <!-- HEADER -->
-  <header class="bg-black text-white fixed top-0 w-full z-50 shadow-lg">
-
-    <!-- MENU PRINCIPAL -->
-    <nav class="container mx-auto flex items-center justify-between p-4">
-
-      <!-- LOGO -->
-      <div class="flex items-center gap-3">
-
-        <img
-          src="./assets/images/logo.png"
-          alt="Logo Remigio Eventos"
-          class="w-12 h-12 rounded-full object-cover"
-        >
-
-        <h1 class="font-bold text-xl">
-          Remigio Eventos
-        </h1>
-
-      </div>
-
-      <!-- MENU DESKTOP -->
-      <ul class="hidden md:flex gap-6">
-
-        <li>
-          <a
-            href="index.html"
-            class="hover:text-blue-400 transition"
-          >
-            Home
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="quem-somos.html"
-            class="hover:text-blue-400 transition"
-          >
-            Quem Somos
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="eventos.html"
-            class="hover:text-blue-400 transition"
-          >
-            Eventos
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="contato.html"
-            class="hover:text-blue-400 transition"
-          >
-            Contato
-          </a>
-        </li>
-
-      </ul>
-
-      <!-- BOTÃO MOBILE -->
-      <button
-        id="menu-button"
-        class="md:hidden bg-gray-900 hover:bg-blue-600 transition px-4 py-2 rounded-lg text-2xl shadow-lg"
-      >
-        ☰
-      </button>
-
-    </nav>
-
-    <!-- MENU MOBILE -->
-    <div
-      id="mobile-menu"
-      class="hidden md:hidden bg-black px-5 pb-6 pt-2 shadow-2xl"
-    >
-
-      <div class="flex flex-col gap-4">
-
-        <a
-          href="index.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          🏠 Home
-        </a>
-
-        <a
-          href="quem-somos.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          👥 Quem Somos
-        </a>
-
-        <a
-          href="eventos.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          🎟️ Eventos
-        </a>
-
-        <a
-          href="contato.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          📞 Contato
-        </a>
-
-      </div>
-
-    </div>
-
-    <!-- VOLTAR -->
-    <div class="bg-gray-900 px-6 py-3 flex justify-end">
-
-      <a
-        href="index.html"
-        class="bg-black hover:bg-blue-600 transition px-4 py-2 rounded-lg shadow-lg"
-      >
-        ← Voltar
-      </a>
-
-    </div>
-
-  </header>
+  <!-- HEADER compartilhado (gerado por js/header.js) -->
+  <div id="header-root" data-voltar="index.html"></div>
 
   <!-- MAIN -->
   <main class="container mx-auto pt-44 pb-16 px-6">
@@ -214,19 +93,35 @@
 
         </div>
 
+        <!-- TELEFONE -->
+        <div>
+
+          <label for="telefone" class="block mb-2 font-semibold">
+            Telefone / WhatsApp <span class="text-red-600">*</span>
+          </label>
+
+          <input
+            type="tel"
+            id="telefone"
+            required
+            placeholder="+55 82 9 9655-8114"
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+          <p class="text-xs text-gray-400 mt-1">Informe seu WhatsApp para retorno mais rápido.</p>
+
+        </div>
+
         <!-- EVENTO -->
         <div>
 
-          <label
-            for="evento"
-            class="block mb-2 font-semibold"
-          >
-            Evento
+          <label for="evento" class="block mb-2 font-semibold">
+            Evento <span class="text-red-600">*</span>
           </label>
 
           <input
             type="text"
             id="evento"
+            required
             placeholder="Ex: Tech Summit 2026"
             class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
@@ -285,41 +180,36 @@
 
   <script>
 
-    // MENU MOBILE
-    const menuButton = document.getElementById("menu-button");
+    // FORMULÁRIO — API_URL e apiFetch vêm de js/api.js
+    // Menu mobile gerenciado por js/header.js
 
-    const mobileMenu = document.getElementById("mobile-menu");
+    // Pré-preenchimento via URL (usado pela área do usuário para dados sensíveis)
+    (function () {
+      const p = new URLSearchParams(window.location.search);
+      if (p.get("nome"))    document.getElementById("nome").value    = p.get("nome");
+      if (p.get("email"))   document.getElementById("email").value   = p.get("email");
+      if (p.get("evento"))  document.getElementById("evento").value  = p.get("evento");
 
-    menuButton.addEventListener("click", () => {
-
-      mobileMenu.classList.toggle("hidden");
-
-    });
-
-    // FORMULÁRIO
-    const API_URL = "https://remigio-eventos-backend.onrender.com";
-
-    function mensagemErroHttp(status) {
-
-      const mensagens = {
-        400: "Dados inválidos. Verifique os campos e tente novamente.",
-        404: "Recurso não encontrado (404).",
-        408: "Tempo de espera esgotado (408). Tente novamente.",
-        500: "Erro interno do servidor (500).",
-        502: "Servidor indisponível no momento (502).",
-        503: "Servidor indisponível no momento (503).",
-      };
-
-      return mensagens[status] || `Ocorreu um erro inesperado (${status}).`;
-
-    }
+      // Se veio da solicitação de dados sensíveis, ajusta label/placeholder e mostra aviso
+      if (p.get("assunto") === "sensivel") {
+        const label = document.querySelector("label[for='evento']");
+        const input = document.getElementById("evento");
+        if (label) label.innerHTML = `Assunto <span class="text-red-600">*</span>`;
+        if (input) input.placeholder = "Ex: Alteração de e-mail / Alteração de CPF";
+        const aviso = document.createElement("div");
+        aviso.className = "mb-6 bg-yellow-50 border border-yellow-300 rounded-xl p-4 text-sm text-yellow-800";
+        aviso.innerHTML = `
+          <strong>📋 Solicitação de alteração de dados sensíveis</strong><br>
+          Descreva na mensagem abaixo qual informação deseja alterar e o novo valor.
+          Nossa equipe responderá em até 2 dias úteis.
+        `;
+        document.getElementById("form-contato").prepend(aviso);
+      }
+    })();
 
     const formContato = document.getElementById("form-contato");
-
     const mensagemSucesso = document.getElementById("mensagem-sucesso");
-
     const mensagemErro = document.getElementById("mensagem-erro");
-
     const botaoEnviar = document.getElementById("botao-enviar");
 
     formContato.addEventListener("submit", async (event) => {
@@ -329,69 +219,44 @@
       if (botaoEnviar.disabled) return;
 
       mensagemSucesso.classList.add("hidden");
-
       mensagemErro.classList.add("hidden");
 
       const dados = {
-        nome: document.getElementById("nome").value,
-        email: document.getElementById("email").value,
-        evento: document.getElementById("evento").value,
+        nome:     document.getElementById("nome").value,
+        email:    document.getElementById("email").value,
+        telefone: document.getElementById("telefone").value.trim(),
+        evento:   document.getElementById("evento").value,
         mensagem: document.getElementById("mensagem").value,
       };
 
       botaoEnviar.disabled = true;
-
       botaoEnviar.textContent = "Enviando...";
 
       try {
 
-        const resposta = await fetch(`${API_URL}/api/leads`, {
+        await apiFetch("/api/leads", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dados),
         });
 
-        if (!resposta.ok) {
-
-          let resultado = {};
-
-          try {
-            resultado = await resposta.json();
-          } catch (_erroJson) {}
-
-          mensagemErro.textContent = `❌ ${resultado.erro || mensagemErroHttp(resposta.status)}`;
-
-          mensagemErro.classList.remove("hidden");
-
-          return;
-
-        }
-
         mensagemSucesso.classList.remove("hidden");
-
         formContato.reset();
+
+        setTimeout(() => {
+          mensagemSucesso.classList.add("hidden");
+        }, 4000);
 
       } catch (erro) {
 
-        mensagemErro.textContent = "❌ Não foi possível conectar. Tente novamente em instantes.";
-
+        mensagemErro.textContent = `❌ ${erro.message}`;
         mensagemErro.classList.remove("hidden");
-
-        return;
 
       } finally {
 
         botaoEnviar.disabled = false;
-
         botaoEnviar.textContent = "Enviar Mensagem";
 
       }
-
-      setTimeout(() => {
-
-        mensagemSucesso.classList.add("hidden");
-
-      }, 4000);
 
     });
 

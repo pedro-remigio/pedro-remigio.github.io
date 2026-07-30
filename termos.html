@@ -18,98 +18,131 @@
   >
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/header.js"></script>
 
 </head>
 
 <body class="bg-gray-100 text-gray-800">
 
-  <!-- HEADER -->
-  <header class="bg-black text-white p-4 shadow-lg">
-
-    <div class="container mx-auto flex justify-between items-center">
-
-      <div class="flex items-center gap-3">
-
-        <img
-          src="./assets/images/logo.png"
-          alt="Logo"
-          class="w-12 h-12 rounded-full"
-        >
-
-        <h1 class="font-bold text-xl">
-          Remigio Eventos
-        </h1>
-
-      </div>
-
-      <a
-        href="tech-summit.html"
-        class="hover:text-blue-400 transition"
-      >
-        Voltar
-      </a>
-
-    </div>
-
-  </header>
+  <!-- HEADER compartilhado (gerado por js/header.js) -->
+  <div id="header-root" data-voltar="cadastro.html" data-voltar-texto="← Voltar para Cadastro"></div>
 
   <!-- CONTEÚDO -->
-  <main class="container mx-auto py-12 px-6">
+  <main class="container mx-auto pt-44 pb-16 px-6">
 
     <section class="bg-white p-8 rounded-xl shadow-lg max-w-4xl mx-auto">
 
-      <h2 class="text-4xl font-bold mb-8">
-        Termos de Uso e Política de Privacidade
-      </h2>
+      <h2 class="text-4xl font-bold mb-2">Termos de Uso e Política de Privacidade</h2>
+      <p class="text-gray-400 text-sm mb-8">Última atualização: janeiro de 2026</p>
 
-      <div class="space-y-6 text-lg leading-relaxed">
+      <div class="space-y-8 text-base leading-relaxed text-gray-700">
 
-        <p>
+        <!-- 1 -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">1. Sobre a Plataforma</h3>
+          <p>
+            A <strong>Remigio Eventos e Serviços</strong> (CNPJ 48.374.563/0001-76)
+            opera esta plataforma de inscrição e gerenciamento de eventos.
+            Ao criar uma conta ou se inscrever em qualquer evento, o participante
+            declara ter lido e aceito integralmente estes Termos de Uso.
+          </p>
+        </div>
 
-          Eu autorizo a empresa
-          <strong>
-            Remigio Eventos e Serviços
-          </strong>,
-          a coleta de dados e a produção de filmagem
-          e fotografia publicitária contendo minha imagem
-          para o evento Tech Summit 2026.
+        <!-- 2 -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">2. Coleta e Uso de Dados (LGPD)</h3>
+          <p>
+            Os dados pessoais coletados no cadastro (nome, e-mail, CPF ou passaporte
+            e telefone) são utilizados exclusivamente para:
+          </p>
+          <ul class="list-disc pl-6 mt-2 space-y-1">
+            <li>Identificação e controle de acesso ao evento;</li>
+            <li>Envio de comunicações relacionadas aos eventos inscritos;</li>
+            <li>Emissão de certificados de participação;</li>
+            <li>Cumprimento de obrigações legais.</li>
+          </ul>
+          <p class="mt-2">
+            Os dados não serão vendidos, cedidos ou compartilhados com terceiros
+            sem o consentimento expresso do titular, em conformidade com a
+            <strong>Lei Geral de Proteção de Dados (Lei nº 13.709/2018 — LGPD)</strong>.
+          </p>
+        </div>
 
-        </p>
+        <!-- 3 -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">3. Autorização de Imagem</h3>
+          <p>
+            Ao se inscrever em eventos presenciais promovidos pela Remigio Eventos e Serviços,
+            o participante autoriza, de livre e espontânea vontade, a captação de fotografias
+            e vídeos durante os eventos para fins de divulgação institucional nos meios de
+            comunicação digital (internet, redes sociais, e-mail, inclusive TV e smartphones),
+            sem qualquer ônus ou remuneração.
+          </p>
+          <p class="mt-2">
+            O participante poderá solicitar a remoção de imagens a qualquer momento
+            pelos canais oficiais da empresa.
+          </p>
+        </div>
 
-        <p>
+        <!-- 4 -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">4. Responsabilidades do Participante</h3>
+          <ul class="list-disc pl-6 space-y-1">
+            <li>Fornecer informações verdadeiras e atualizadas no cadastro;</li>
+            <li>Manter a confidencialidade de sua senha de acesso;</li>
+            <li>Não realizar inscrições em nome de terceiros sem autorização;</li>
+            <li>Respeitar as regras e normas de conduta dos eventos.</li>
+          </ul>
+        </div>
 
-          Autorizo a publicação nos meios de comunicação
-          digital (internet, redes sociais, e-mail,
-          inclusive TV e smartphones) para fins de divulgação
-          do Tech Summit 2026, evento da Remigio Eventos e Serviços,
-          sem quaisquer ônus e restrições.
+        <!-- 5 -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">5. Cancelamento de Inscrição</h3>
+          <p>
+            O participante pode cancelar sua inscrição em eventos futuros diretamente
+            pela Área do Usuário, enquanto as inscrições estiverem abertas.
+            Não é possível cancelar inscrições em eventos já encerrados.
+          </p>
+        </div>
 
-        </p>
+        <!-- 6 -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">6. Direitos do Titular (LGPD)</h3>
+          <p>O titular dos dados pode, a qualquer momento, solicitar:</p>
+          <ul class="list-disc pl-6 mt-2 space-y-1">
+            <li>Confirmação da existência de tratamento de seus dados;</li>
+            <li>Acesso aos dados cadastrados;</li>
+            <li>Correção de dados incompletos ou desatualizados;</li>
+            <li>Exclusão dos dados pessoais da plataforma;</li>
+            <li>Revogação do consentimento.</li>
+          </ul>
+          <p class="mt-2">
+            Solicitações devem ser enviadas para
+            <a href="mailto:remigio.pedro@gmail.com" class="text-blue-600 hover:underline">remigio.pedro@gmail.com</a>.
+          </p>
+        </div>
 
-        <p>
+        <!-- 7 -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">7. Alterações nos Termos</h3>
+          <p>
+            A Remigio Eventos e Serviços reserva-se o direito de atualizar estes
+            Termos a qualquer momento. Alterações relevantes serão comunicadas por
+            e-mail ou por aviso na plataforma.
+          </p>
+        </div>
 
-          Fica ainda autorizada, de livre e espontânea vontade,
-          para os mesmos fins, a cessão de direitos da veiculação,
-          não recebendo para tanto qualquer tipo de remuneração.
-
-        </p>
-
-        <p>
-
-          Os dados coletados durante a inscrição serão utilizados
-          exclusivamente para identificação, comunicação e organização
-          do evento, respeitando as diretrizes da Lei Geral de Proteção
-          de Dados (LGPD).
-
-        </p>
-
-        <p>
-
-          O participante poderá solicitar a remoção de imagens
-          ou dados pessoais a qualquer momento através dos canais
-          oficiais da Remigio Eventos e Serviços.
-
-        </p>
+        <!-- Contato -->
+        <div class="bg-gray-50 rounded-xl p-6">
+          <h3 class="text-lg font-bold text-gray-900 mb-1">Contato</h3>
+          <p>
+            Remigio Eventos e Serviços · CNPJ 48.374.563/0001-76<br>
+            Rua Paulo Lobo Assumpção, 153 — Serraria, Maceió/AL, CEP 57043-803<br>
+            📧 <a href="mailto:remigio.pedro@gmail.com" class="text-blue-600 hover:underline">remigio.pedro@gmail.com</a> ·
+            📱 (82) 99655-8114
+          </p>
+        </div>
 
       </div>
 

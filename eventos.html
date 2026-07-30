@@ -18,196 +18,252 @@
   >
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/header.js"></script>
 
 </head>
 
 <body class="bg-gray-100 text-gray-800">
 
-  <!-- HEADER -->
-  <header class="bg-black text-white fixed top-0 w-full z-50 shadow-lg">
-
-    <!-- MENU PRINCIPAL -->
-    <nav class="container mx-auto flex items-center justify-between p-4">
-
-      <!-- LOGO -->
-      <div class="flex items-center gap-3">
-
-        <img
-          src="./assets/images/logo.png"
-          alt="Logo Remigio Eventos"
-          class="w-12 h-12 rounded-full object-cover"
-        >
-
-        <h1 class="font-bold text-xl">
-          Remigio Eventos
-        </h1>
-
-      </div>
-
-      <!-- MENU DESKTOP -->
-      <ul class="hidden md:flex gap-6">
-
-        <li>
-          <a
-            href="index.html"
-            class="hover:text-blue-400 transition"
-          >
-            Home
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="quem-somos.html"
-            class="hover:text-blue-400 transition"
-          >
-            Quem Somos
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="eventos.html"
-            class="hover:text-blue-400 transition"
-          >
-            Eventos
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="contato.html"
-            class="hover:text-blue-400 transition"
-          >
-            Contato
-          </a>
-        </li>
-
-      </ul>
-
-      <!-- BOTÃO MOBILE -->
-      <button
-        id="menu-button"
-        class="md:hidden bg-gray-900 hover:bg-blue-600 transition px-4 py-2 rounded-lg text-2xl shadow-lg"
-      >
-        ☰
-      </button>
-
-    </nav>
-
-    <!-- MENU MOBILE -->
-    <div
-      id="mobile-menu"
-      class="hidden md:hidden bg-black px-5 pb-6 pt-2 shadow-2xl"
-    >
-
-      <div class="flex flex-col gap-4">
-
-        <a
-          href="index.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          🏠 Home
-        </a>
-
-        <a
-          href="quem-somos.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          👥 Quem Somos
-        </a>
-
-        <a
-          href="eventos.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          🎟️ Eventos
-        </a>
-
-        <a
-          href="contato.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          📞 Contato
-        </a>
-
-      </div>
-
-    </div>
-
-    <!-- VOLTAR -->
-    <div class="bg-gray-900 px-6 py-3 flex justify-end">
-
-      <a
-        href="index.html"
-        class="bg-black hover:bg-blue-600 transition px-4 py-2 rounded-lg shadow-lg"
-      >
-        ← Voltar
-      </a>
-
-    </div>
-
-  </header>
+  <!-- HEADER compartilhado (gerado por js/header.js) -->
+  <div id="header-root" data-voltar="index.html"></div>
 
   <!-- MAIN -->
   <main class="container mx-auto pt-44 pb-12 px-6">
 
-    <h2 class="text-4xl font-bold mb-10">
-      Próximos Eventos
+    <h2 class="text-4xl font-bold mb-4">
+      Eventos
     </h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-
-      <!-- CARD TECH SUMMIT -->
-      <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition duration-300">
-
-        <img
-          src="https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200&auto=format&fit=crop"
-          alt="Tech Summit 2026"
-          class="w-full h-56 object-cover"
-        >
-
-        <div class="p-6">
-
-          <h3 class="text-2xl font-bold mb-2">
-            Tech Summit 2026
-          </h3>
-
-          <p class="mb-2 text-gray-600">
-            📍 Centro de Convenções de Maceió
-          </p>
-
-          <p class="mb-6 text-gray-600">
-            📅 14 e 15 de Agosto de 2026
-          </p>
-
-          <a
-            href="tech-summit.html"
-            class="inline-block bg-blue-600 hover:bg-blue-700 transition text-white px-5 py-3 rounded-lg font-semibold"
-          >
-            Saiba Mais
-          </a>
-
-        </div>
-
-      </article>
-
+    <!-- FILTRO -->
+    <div class="flex gap-3 mb-10 flex-wrap">
+      <button
+        onclick="filtrarPorStatus('todos')"
+        id="btn-todos"
+        class="btn-filtro bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition"
+      >
+        Todos
+      </button>
+      <button
+        onclick="filtrarPorStatus('ativo')"
+        id="btn-ativo"
+        class="btn-filtro bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold transition hover:bg-blue-600 hover:text-white"
+      >
+        Próximos
+      </button>
+      <button
+        onclick="filtrarPorStatus('encerrado')"
+        id="btn-encerrado"
+        class="btn-filtro bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold transition hover:bg-blue-600 hover:text-white"
+      >
+        Encerrados
+      </button>
     </div>
+
+    <!-- FEEDBACK DE CARREGAMENTO -->
+    <p id="carregando" class="text-gray-500 text-center py-12">
+      Carregando eventos...
+    </p>
+
+    <!-- MENSAGEM DE ERRO DE CARREGAMENTO -->
+    <p id="erro-carregar" class="hidden text-red-600 text-center py-12">
+      Não foi possível carregar os eventos. Tente novamente mais tarde.
+    </p>
+
+    <!-- GRID DE EVENTOS -->
+    <div
+      id="eventos-container"
+      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+    ></div>
+
+    <!-- NENHUM RESULTADO -->
+    <p id="nenhum-evento" class="hidden text-gray-500 text-center py-12">
+      Nenhum evento encontrado.
+    </p>
+
+    <!-- TOAST DE FEEDBACK DE INSCRIÇÃO -->
+    <div
+      id="toast"
+      class="hidden fixed bottom-6 right-6 z-50 px-6 py-4 rounded-xl shadow-xl text-white font-semibold text-lg transition"
+    ></div>
 
   </main>
 
   <script>
 
-    // MENU MOBILE
-    const menuButton = document.getElementById("menu-button");
+    // ─── EVENTOS ─────────────────────────────────────────────────────────────
+    // Menu mobile e "Área do Usuário" são gerenciados por js/header.js
 
-    const mobileMenu = document.getElementById("mobile-menu");
+    let todosEventos = [];
+    let statusAtivo = "todos";
 
-    menuButton.addEventListener("click", () => {
+    // Formata data para exibição
+    function formatarData(dataStr) {
+      return new Date(dataStr).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
+    }
 
-      mobileMenu.classList.toggle("hidden");
+    // Mostra um toast de feedback (verde = sucesso, vermelho = erro)
+    function mostrarToast(mensagem, tipo = "sucesso") {
+      const toast = document.getElementById("toast");
+      toast.textContent = mensagem;
+      toast.className = `fixed bottom-6 right-6 z-50 px-6 py-4 rounded-xl shadow-xl text-white font-semibold text-lg ${
+        tipo === "sucesso" ? "bg-green-600" : "bg-red-600"
+      }`;
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 3500);
+    }
 
-    });
+    // Inscreve o usuário em um evento
+    async function inscrever(eventoId, titulo) {
+      try {
+        await apiFetch("/api/inscricoes", {
+          method: "POST",
+          body: JSON.stringify({ eventoId }),
+        });
+
+        mostrarToast(`✅ Inscrição confirmada em "${titulo}"!`);
+
+        // Desabilita o botão para evitar inscrição dupla
+        const btn = document.getElementById(`btn-inscrever-${eventoId}`);
+        if (btn) {
+          btn.textContent = "✅ Inscrito";
+          btn.disabled = true;
+          btn.className = btn.className.replace("bg-blue-600 hover:bg-blue-700", "bg-green-600");
+        }
+
+      } catch (erro) {
+        if (erro.message.includes("401") || erro.message.includes("autorizado")) {
+          mostrarToast("⚠️ Faça login para se inscrever.", "erro");
+          setTimeout(() => { window.location.href = "login.html"; }, 1500);
+        } else {
+          mostrarToast(`❌ ${erro.message}`, "erro");
+        }
+      }
+    }
+
+    // Renderiza os cards de eventos
+    function renderizarEventos(lista) {
+      const container = document.getElementById("eventos-container");
+      const nenhum = document.getElementById("nenhum-evento");
+
+      container.innerHTML = "";
+
+      if (lista.length === 0) {
+        nenhum.classList.remove("hidden");
+        return;
+      }
+
+      nenhum.classList.add("hidden");
+
+      lista.forEach((evento) => {
+        const imagem = evento.imagem ||
+          "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop";
+
+        const badgeClass = evento.status === "ativo"
+          ? "bg-green-100 text-green-700"
+          : "bg-gray-200 text-gray-600";
+
+        const badgeTexto = evento.status === "ativo" ? "Inscrições abertas" : "Encerrado";
+
+        const precoHtml = evento.preco != null
+          ? `<span class="font-semibold text-blue-700">R$ ${evento.preco.toFixed(2).replace(".", ",")}</span>`
+          : `<span class="text-green-700 font-semibold">Gratuito</span>`;
+
+        const botaoHtml = evento.status === "ativo"
+          ? `<div class="flex gap-2 flex-wrap">
+               <a href="evento.html?id=${evento.id}"
+                 class="bg-gray-100 hover:bg-gray-200 transition text-gray-700 px-4 py-3 rounded-lg font-semibold text-sm">
+                 Ver detalhes
+               </a>
+               <button
+                 id="btn-inscrever-${evento.id}"
+                 onclick="inscrever(${evento.id}, '${evento.titulo.replace(/'/g, "\\'")}')"
+                 class="bg-blue-600 hover:bg-blue-700 transition text-white px-4 py-3 rounded-lg font-semibold text-sm"
+               >
+                 🎟️ Inscrever-se
+               </button>
+             </div>`
+          : `<a href="evento.html?id=${evento.id}"
+               class="inline-block bg-gray-100 hover:bg-gray-200 transition text-gray-600 px-5 py-3 rounded-lg font-semibold text-sm">
+               Ver detalhes
+             </a>`;
+
+        container.innerHTML += `
+          <article class="bg-white rounded-xl shadow-lg overflow-hidden hover:scale-105 transition duration-300 flex flex-col">
+
+            <a href="evento.html?id=${evento.id}">
+              <img
+                src="${imagem}"
+                alt="${evento.titulo}"
+                class="w-full h-56 object-cover hover:opacity-90 transition"
+              >
+            </a>
+
+            <div class="p-6 flex flex-col flex-1">
+
+              <div class="flex items-center justify-between mb-2">
+                <a href="evento.html?id=${evento.id}" class="hover:text-blue-600 transition">
+                  <h3 class="text-xl font-bold">${evento.titulo}</h3>
+                </a>
+                <span class="px-2 py-1 rounded-full text-xs font-semibold ${badgeClass}">${badgeTexto}</span>
+              </div>
+
+              <p class="text-gray-500 text-sm mb-4 line-clamp-2">${evento.descricao}</p>
+
+              <p class="mb-1 text-gray-600 text-sm">📍 ${evento.local}</p>
+              <p class="mb-1 text-gray-600 text-sm">📅 ${formatarData(evento.data)}</p>
+              <p class="mb-6 text-sm">💰 ${precoHtml}</p>
+
+              <div class="mt-auto">
+                ${botaoHtml}
+              </div>
+
+            </div>
+
+          </article>
+        `;
+      });
+    }
+
+    // Filtra por status e ativa o botão correspondente
+    function filtrarPorStatus(status) {
+      statusAtivo = status;
+
+      document.querySelectorAll(".btn-filtro").forEach((btn) => {
+        btn.className = "btn-filtro bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold transition hover:bg-blue-600 hover:text-white";
+      });
+
+      document.getElementById(`btn-${status}`).className =
+        "btn-filtro bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition";
+
+      if (status === "todos") {
+        renderizarEventos(todosEventos);
+      } else {
+        renderizarEventos(todosEventos.filter((e) => e.status === status));
+      }
+    }
+
+    // Busca eventos da API ao carregar a página
+    async function carregarEventos() {
+      const carregando = document.getElementById("carregando");
+      const erroCarregar = document.getElementById("erro-carregar");
+
+      try {
+        const dados = await apiFetch("/api/eventos");
+        todosEventos = dados.eventos;
+        carregando.classList.add("hidden");
+        renderizarEventos(todosEventos);
+      } catch {
+        carregando.classList.add("hidden");
+        erroCarregar.classList.remove("hidden");
+      }
+    }
+
+    carregarEventos();
 
   </script>
 

@@ -18,136 +18,15 @@
   >
 
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/header.js"></script>
 
 </head>
 
 <body class="bg-gray-100 text-gray-800">
 
-  <!-- HEADER -->
-  <header class="bg-black text-white fixed top-0 w-full z-50 shadow-lg">
-
-    <!-- MENU PRINCIPAL -->
-    <nav class="container mx-auto flex items-center justify-between p-4">
-
-      <!-- LOGO -->
-      <div class="flex items-center gap-3">
-
-        <img
-          src="./assets/images/logo.png"
-          alt="Logo Remigio Eventos"
-          class="w-12 h-12 rounded-full object-cover"
-        >
-
-        <h1 class="font-bold text-xl">
-          Remigio Eventos
-        </h1>
-
-      </div>
-
-      <!-- MENU DESKTOP -->
-      <ul class="hidden md:flex gap-6">
-
-        <li>
-          <a
-            href="index.html"
-            class="hover:text-blue-400 transition"
-          >
-            Home
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="quem-somos.html"
-            class="hover:text-blue-400 transition"
-          >
-            Quem Somos
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="eventos.html"
-            class="hover:text-blue-400 transition"
-          >
-            Eventos
-          </a>
-        </li>
-
-        <li>
-          <a
-            href="contato.html"
-            class="hover:text-blue-400 transition"
-          >
-            Contato
-          </a>
-        </li>
-
-      </ul>
-
-      <!-- BOTÃO MOBILE -->
-      <button
-        id="menu-button"
-        class="md:hidden bg-gray-900 hover:bg-blue-600 transition px-4 py-2 rounded-lg text-2xl shadow-lg"
-      >
-        ☰
-      </button>
-
-    </nav>
-
-    <!-- MENU MOBILE -->
-    <div
-      id="mobile-menu"
-      class="hidden md:hidden bg-black px-5 pb-6 pt-2 shadow-2xl"
-    >
-
-      <div class="flex flex-col gap-4">
-
-        <a
-          href="index.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          🏠 Home
-        </a>
-
-        <a
-          href="quem-somos.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          👥 Quem Somos
-        </a>
-
-        <a
-          href="eventos.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          🎟️ Eventos
-        </a>
-
-        <a
-          href="contato.html"
-          class="bg-gray-900 hover:bg-blue-600 transition duration-300 rounded-xl px-5 py-4 text-lg font-semibold shadow-lg"
-        >
-          📞 Contato
-        </a>
-
-      </div>
-
-    </div>
-
-    <!-- VOLTAR -->
-    <div class="bg-gray-900 px-6 py-3 flex justify-end">
-
-      <a
-        href="index.html"
-        class="bg-black hover:bg-blue-600 transition px-4 py-2 rounded-lg shadow-lg"
-      >
-        ← Voltar
-      </a>
-
-    </div>
-
-  </header>
+  <!-- HEADER compartilhado (gerado por js/header.js) -->
+  <div id="header-root" data-voltar="index.html"></div>
 
   <!-- MAIN -->
   <main class="container mx-auto pt-44 pb-16 px-6">
@@ -296,20 +175,6 @@
 
   </main>
 
-  <script>
-
-    // MENU MOBILE
-    const menuButton = document.getElementById("menu-button");
-
-    const mobileMenu = document.getElementById("mobile-menu");
-
-    menuButton.addEventListener("click", () => {
-
-      mobileMenu.classList.toggle("hidden");
-
-    });
-
-  </script>
 
 </body>
 </html>

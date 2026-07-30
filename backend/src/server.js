@@ -3,6 +3,7 @@ require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const cors = require("cors");
+const helmet = require("helmet");
 const session = require("express-session");
 
 const publicRoutes = require("./routes/public");
@@ -11,21 +12,67 @@ const ensureAdmin = require("./ensureAdmin");
 
 const app = express();
 
-app.use(cors());
+// ─── Segurança: cabeçalhos HTTP (OWASP A05 – Security Misconfiguration) ───────
+// Helmet adiciona X-Frame-Options, X-Content-Type-Options,
+// Strict-Transport-Security, etc., cobrindo vários itens do OWASP Top 10.
+// CSP configurado para permitir o Tailwind CDN e imagens do Unsplash na área admin.
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com", "https://fonts.googleapis.com"],
+        imgSrc: ["'self'", "data:", "https://images.unsplash.com", "https://*.unsplash.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        connectSrc: ["'self'"],
+        frameSrc: ["'none'"],
+        objectSrc: ["'none'"],
+      },
+    },
+  })
+);
+
+// ─── CORS ─────────────────────────────────────────────────────────────────────
+// credentials: true → permite envio de cookies entre origens diferentes
+// origin: FRONTEND_URL → só o front-end do projeto acessa a API com cookies
+// Sem isso qualquer site poderia chamar a API com os cookies do usuário (CSRF).
+const isProd = process.env.NODE_ENV === "production";
+const frontendUrl = process.env.FRONTEND_URL;
+
+app.use(
+  cors({
+    origin: frontendUrl || true, // "true" reflete a origem em dev (sem restrição de domínio)
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// ─── Sessão ───────────────────────────────────────────────────────────────────
+// httpOnly: true  → JS do browser não lê o cookie (proteção XSS)
+// secure: true    → cookie só trafega em HTTPS (produção)
+// sameSite: none  → necessário para cookies cross-origin em produção
+//                   (GitHub Pages usa domínio diferente do backend na AWS)
 app.use(
   session({
     secret: process.env.SESSION_SECRET || "segredo-dev",
     resave: false,
     saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+      maxAge: 24 * 60 * 60 * 1000, // 1 dia
+    },
   })
 );
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+// ─── Rotas ────────────────────────────────────────────────────────────────────
 app.use("/api", publicRoutes);
 app.use("/admin", adminRoutes);
 
@@ -33,9 +80,7 @@ app.get("/", (req, res) => {
   res.redirect("/admin/login");
 });
 
-// Middleware de erro: garante que qualquer falha (banco fora do ar, JSON
-// inválido no corpo da requisição, etc.) sempre gere uma resposta ao invés de
-// deixar a requisição travada ou derrubar o processo inteiro.
+// ─── Middleware de erro global ─────────────────────────────────────────────────
 app.use((err, req, res, next) => {
   console.error(err);
 
@@ -46,8 +91,6 @@ app.use((err, req, res, next) => {
   res.status(500).send("Ocorreu um erro interno. Tente novamente mais tarde.");
 });
 
-// Rede de segurança: loga em vez de derrubar o processo em caso de erro
-// assíncrono que escape dos handlers (ex: erro fora do ciclo de requisição).
 process.on("unhandledRejection", (motivo) => {
   console.error("Unhandled Rejection:", motivo);
 });

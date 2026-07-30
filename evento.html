@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Evento — Remigio Eventos</title>
+
+  <link rel="icon" type="image/png" href="./assets/images/logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/header.js"></script>
+
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- HEADER compartilhado (gerado por js/header.js) -->
+  <div id="header-root" data-voltar="eventos.html" data-voltar-texto="← Voltar para Eventos"></div>
+
+  <!-- CARREGANDO -->
+  <main class="container mx-auto pt-44 pb-16 px-6">
+
+    <div id="carregando" class="text-center py-24 text-gray-500 text-lg">Carregando evento...</div>
+    <div id="erro-404" class="hidden text-center py-24">
+      <p class="text-5xl mb-4">😕</p>
+      <p class="text-2xl font-bold mb-2">Evento não encontrado</p>
+      <a href="eventos.html" class="text-blue-600 hover:underline">Ver todos os eventos</a>
+    </div>
+
+    <!-- CONTEÚDO DO EVENTO -->
+    <div id="conteudo-evento" class="hidden max-w-4xl mx-auto">
+
+      <!-- IMAGEM HERO -->
+      <div class="rounded-2xl overflow-hidden shadow-xl mb-8 h-80 md:h-96">
+        <img id="evento-imagem" src="" alt="" class="w-full h-full object-cover">
+      </div>
+
+      <!-- CABEÇALHO -->
+      <div class="bg-white rounded-2xl shadow-lg p-8 mb-6">
+
+        <div class="flex items-start justify-between gap-4 mb-4 flex-wrap">
+          <h2 id="evento-titulo" class="text-3xl md:text-4xl font-bold"></h2>
+          <span id="evento-badge" class="px-3 py-1 rounded-full text-sm font-semibold flex-shrink-0"></span>
+        </div>
+
+        <!-- INFOS RÁPIDAS -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 text-gray-700">
+
+          <div class="flex items-center gap-3 bg-gray-50 rounded-xl p-4">
+            <span class="text-2xl">📅</span>
+            <div>
+              <p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">Data</p>
+              <p id="evento-data" class="font-semibold"></p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 bg-gray-50 rounded-xl p-4">
+            <span class="text-2xl">📍</span>
+            <div>
+              <p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">Local</p>
+              <p id="evento-local" class="font-semibold"></p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3 bg-gray-50 rounded-xl p-4">
+            <span class="text-2xl">💰</span>
+            <div>
+              <p class="text-xs text-gray-400 font-semibold uppercase tracking-wide">Valor</p>
+              <p id="evento-preco" class="font-semibold"></p>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- VAGAS -->
+        <div id="vagas-container" class="flex items-center gap-2 mb-6 text-sm text-gray-500">
+          <span>🎟️</span>
+          <span id="evento-vagas"></span>
+        </div>
+
+        <!-- DESCRIÇÃO -->
+        <h3 class="text-xl font-bold mb-3">Sobre o evento</h3>
+        <p id="evento-descricao" class="text-gray-600 leading-relaxed mb-8"></p>
+
+        <!-- BOTÃO DE INSCRIÇÃO -->
+        <div id="area-inscricao">
+          <button
+            id="btn-inscrever"
+            class="bg-blue-600 hover:bg-blue-700 transition text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            🎟️ Inscrever-se neste evento
+          </button>
+        </div>
+
+      </div>
+
+      <!-- LOCALIZAÇÃO (link Google Maps) -->
+      <div class="bg-white rounded-2xl shadow-lg p-8">
+        <h3 class="text-xl font-bold mb-3">📍 Localização</h3>
+        <p id="local-texto" class="text-gray-600 mb-4"></p>
+        <a id="link-maps" href="#" target="_blank" rel="noopener"
+          class="inline-flex items-center gap-2 bg-blue-50 hover:bg-blue-100 text-blue-700 px-4 py-2 rounded-lg transition font-semibold text-sm">
+          🗺️ Ver no Google Maps
+        </a>
+      </div>
+
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="hidden fixed bottom-6 right-6 z-50 px-6 py-4 rounded-xl shadow-xl text-white font-semibold text-lg"></div>
+
+  </main>
+
+  <script>
+
+    // Menu mobile e "Área do Usuário" gerenciados por js/header.js
+
+    // Toast
+    function mostrarToast(mensagem, tipo = "sucesso") {
+      const toast = document.getElementById("toast");
+      toast.textContent = mensagem;
+      toast.className = `fixed bottom-6 right-6 z-50 px-6 py-4 rounded-xl shadow-xl text-white font-semibold text-lg ${
+        tipo === "sucesso" ? "bg-green-600" : "bg-red-600"
+      }`;
+      toast.classList.remove("hidden");
+      setTimeout(() => toast.classList.add("hidden"), 3500);
+    }
+
+    function formatarData(dataStr) {
+      return new Date(dataStr).toLocaleDateString("pt-BR", {
+        weekday: "long", day: "2-digit", month: "long", year: "numeric",
+      });
+    }
+
+    function formatarHora(dataStr) {
+      return new Date(dataStr).toLocaleTimeString("pt-BR", {
+        hour: "2-digit", minute: "2-digit",
+      });
+    }
+
+    async function carregarEvento() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+
+      if (!id) {
+        document.getElementById("carregando").classList.add("hidden");
+        document.getElementById("erro-404").classList.remove("hidden");
+        return;
+      }
+
+      try {
+        const dados = await apiFetch(`/api/eventos/${id}`);
+        const e = dados.evento;
+
+        // Atualiza título da aba
+        document.title = `${e.titulo} — Remigio Eventos`;
+
+        // Preenche campos
+        document.getElementById("evento-imagem").src = e.imagem ||
+          "https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop";
+        document.getElementById("evento-imagem").alt = e.titulo;
+        document.getElementById("evento-titulo").textContent = e.titulo;
+        document.getElementById("evento-descricao").textContent = e.descricao;
+        document.getElementById("evento-data").textContent =
+          `${formatarData(e.data)} às ${formatarHora(e.data)}`;
+        document.getElementById("evento-local").textContent = e.local;
+        document.getElementById("evento-preco").textContent =
+          e.preco != null
+            ? `R$ ${e.preco.toFixed(2).replace(".", ",")}`
+            : "Gratuito";
+
+        // Badge status
+        const badge = document.getElementById("evento-badge");
+        if (e.status === "ativo") {
+          badge.textContent = "Inscrições abertas";
+          badge.className = "px-3 py-1 rounded-full text-sm font-semibold flex-shrink-0 bg-green-100 text-green-700";
+        } else {
+          badge.textContent = e.status === "encerrado" ? "Encerrado" : "Cancelado";
+          badge.className = "px-3 py-1 rounded-full text-sm font-semibold flex-shrink-0 bg-gray-200 text-gray-600";
+        }
+
+        // Vagas
+        const totalInscritos = e._count?.inscricoes ?? 0;
+        document.getElementById("evento-vagas").textContent =
+          `${totalInscritos} inscrição(ões) confirmada(s) · ${e.capacidade} vagas no total`;
+
+        // Localização
+        document.getElementById("local-texto").textContent = e.local;
+        document.getElementById("link-maps").href =
+          `https://www.google.com/maps/search/${encodeURIComponent(e.local)}`;
+
+        // Botão de inscrição
+        const areaInscricao = document.getElementById("area-inscricao");
+        const btnInscrever  = document.getElementById("btn-inscrever");
+
+        if (e.status !== "ativo") {
+          areaInscricao.innerHTML = `
+            <span class="inline-block bg-gray-200 text-gray-600 px-8 py-4 rounded-xl font-bold text-lg">
+              Inscrições encerradas
+            </span>`;
+        } else {
+          btnInscrever.addEventListener("click", async () => {
+            // Verifica se está logado
+            const sessao = await verificarSessao();
+            if (!sessao) {
+              mostrarToast("⚠️ Faça login para se inscrever.", "erro");
+              setTimeout(() => { window.location.href = "login.html"; }, 1500);
+              return;
+            }
+
+            btnInscrever.disabled = true;
+            btnInscrever.textContent = "Inscrevendo...";
+
+            try {
+              await apiFetch("/api/inscricoes", {
+                method: "POST",
+                body: JSON.stringify({ eventoId: e.id }),
+              });
+
+              mostrarToast("✅ Inscrição confirmada!");
+              btnInscrever.textContent = "✅ Inscrito!";
+              btnInscrever.className = btnInscrever.className
+                .replace("bg-blue-600 hover:bg-blue-700", "bg-green-600");
+
+            } catch (erro) {
+              if (erro.message.includes("já está inscrito")) {
+                btnInscrever.textContent = "✅ Você já está inscrito";
+                btnInscrever.className = btnInscrever.className
+                  .replace("bg-blue-600 hover:bg-blue-700", "bg-green-600");
+              } else {
+                mostrarToast(`❌ ${erro.message}`, "erro");
+                btnInscrever.disabled = false;
+                btnInscrever.textContent = "🎟️ Inscrever-se neste evento";
+              }
+            }
+          });
+        }
+
+        // Exibe o conteúdo
+        document.getElementById("carregando").classList.add("hidden");
+        document.getElementById("conteudo-evento").classList.remove("hidden");
+
+      } catch (err) {
+        console.error("Erro ao carregar evento:", err);
+        document.getElementById("carregando").classList.add("hidden");
+        document.getElementById("erro-404").innerHTML += `<p class="text-red-400 text-sm mt-4">${err.message}</p>`;
+        document.getElementById("erro-404").classList.remove("hidden");
+      }
+    }
+
+    carregarEvento();
+
+  </script>
+
+</body>
+</html>

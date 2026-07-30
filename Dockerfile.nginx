@@ -1,0 +1,15 @@
+FROM nginx:alpine
+
+# Remove a config padrão do nginx e usa a nossa
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copia apenas os arquivos do frontend para dentro da imagem
+# (backend/ fica de fora via .dockerignore na raiz)
+COPY assets /usr/share/nginx/html/assets
+COPY js     /usr/share/nginx/html/js
+
+# Copia todas as páginas HTML
+COPY *.html /usr/share/nginx/html/
+
+EXPOSE 80

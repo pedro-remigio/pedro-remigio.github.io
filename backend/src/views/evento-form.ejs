@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - <%= evento ? 'Editar Evento' : 'Novo Evento' %></title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <header class="bg-black text-white shadow-lg">
+    <div class="container mx-auto flex items-center justify-between p-4">
+      <h1 class="font-bold text-xl">Painel do Administrador — Remigio Eventos</h1>
+      <a href="/admin/logout" class="bg-gray-900 hover:bg-red-600 transition px-4 py-2 rounded-lg">Sair</a>
+    </div>
+  </header>
+
+  <main class="container mx-auto py-10 px-6 max-w-2xl">
+
+    <div class="flex items-center gap-4 mb-6">
+      <a href="/admin/dashboard" class="text-blue-600 hover:underline">← Voltar ao Dashboard</a>
+      <h2 class="text-2xl font-bold"><%= evento ? 'Editar Evento' : 'Novo Evento' %></h2>
+    </div>
+
+    <% if (erro) { %>
+      <p class="bg-red-100 text-red-700 rounded-lg p-3 mb-4"><%= erro %></p>
+    <% } %>
+
+    <form
+      method="POST"
+      action="<%= evento ? '/admin/eventos/' + evento.id : '/admin/eventos' %>"
+      class="bg-white rounded-xl shadow-lg p-8 space-y-5"
+    >
+
+      <div>
+        <label class="block mb-1 font-semibold" for="titulo">Título *</label>
+        <input
+          type="text"
+          id="titulo"
+          name="titulo"
+          required
+          value="<%= evento ? evento.titulo : '' %>"
+          class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+      </div>
+
+      <div>
+        <label class="block mb-1 font-semibold" for="descricao">Descrição *</label>
+        <textarea
+          id="descricao"
+          name="descricao"
+          required
+          rows="4"
+          class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        ><%= evento ? evento.descricao : '' %></textarea>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block mb-1 font-semibold" for="data">Data e Hora *</label>
+          <input
+            type="datetime-local"
+            id="data"
+            name="data"
+            required
+            value="<%= evento ? new Date(evento.data).toISOString().slice(0, 16) : '' %>"
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+        </div>
+
+        <div>
+          <label class="block mb-1 font-semibold" for="capacidade">Capacidade</label>
+          <input
+            type="number"
+            id="capacidade"
+            name="capacidade"
+            min="1"
+            value="<%= evento ? evento.capacidade : 100 %>"
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+        </div>
+      </div>
+
+      <div>
+        <label class="block mb-1 font-semibold" for="local">Local *</label>
+        <input
+          type="text"
+          id="local"
+          name="local"
+          required
+          value="<%= evento ? evento.local : '' %>"
+          class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+      </div>
+
+      <div>
+        <label class="block mb-1 font-semibold" for="preco">
+          Valor da Inscrição (R$)
+          <span class="text-gray-400 font-normal text-sm">— deixe vazio para evento gratuito</span>
+        </label>
+        <input
+          type="number"
+          id="preco"
+          name="preco"
+          min="0"
+          step="0.01"
+          placeholder="Ex: 35.00"
+          value="<%= evento && evento.preco != null ? evento.preco : '' %>"
+          class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+      </div>
+
+      <div>
+        <label class="block mb-1 font-semibold" for="imagem">URL da Imagem</label>
+        <input
+          type="url"
+          id="imagem"
+          name="imagem"
+          value="<%= evento && evento.imagem ? evento.imagem : '' %>"
+          placeholder="https://..."
+          class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+      </div>
+
+      <div>
+        <label class="block mb-1 font-semibold" for="status">Status</label>
+        <select
+          id="status"
+          name="status"
+          class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="ativo" <%= (!evento || evento.status === 'ativo') ? 'selected' : '' %>>Ativo</option>
+          <option value="encerrado" <%= (evento && evento.status === 'encerrado') ? 'selected' : '' %>>Encerrado</option>
+          <option value="cancelado" <%= (evento && evento.status === 'cancelado') ? 'selected' : '' %>>Cancelado</option>
+        </select>
+      </div>
+
+      <div class="flex gap-4 pt-2">
+        <button
+          type="submit"
+          class="bg-blue-600 hover:bg-blue-700 transition text-white px-6 py-3 rounded-lg font-semibold"
+        >
+          <%= evento ? 'Salvar Alterações' : 'Criar Evento' %>
+        </button>
+        <a
+          href="/admin/dashboard"
+          class="bg-gray-200 hover:bg-gray-300 transition text-gray-800 px-6 py-3 rounded-lg font-semibold"
+        >
+          Cancelar
+        </a>
+      </div>
+
+    </form>
+
+  </main>
+
+</body>
+</html>

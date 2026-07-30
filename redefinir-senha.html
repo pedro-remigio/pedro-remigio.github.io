@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redefinir Senha — Remigio Eventos</title>
+  <link rel="icon" type="image/png" href="./assets/images/logo.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="./js/api.js"></script>
+  <script src="./js/header.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+  <!-- HEADER compartilhado (gerado por js/header.js) -->
+  <div id="header-root" data-voltar="esqueci-senha.html" data-voltar-texto="← Voltar"></div>
+
+  <main class="container mx-auto pt-44 pb-16 px-6">
+    <section class="bg-white p-8 rounded-xl shadow-lg max-w-md mx-auto">
+
+      <div class="text-center mb-6">
+        <div class="text-5xl mb-3">🔒</div>
+        <h2 class="text-3xl font-bold">Redefinir Senha</h2>
+        <p class="text-gray-500 mt-2">Digite e confirme sua nova senha.</p>
+      </div>
+
+      <!-- Token inválido -->
+      <div id="token-invalido" class="hidden bg-red-50 border border-red-200 rounded-lg p-4 text-center">
+        <p class="text-red-700 font-semibold">❌ Link inválido ou expirado.</p>
+        <a href="esqueci-senha.html" class="text-blue-600 hover:underline font-semibold text-sm mt-2 inline-block">
+          Solicitar novo link
+        </a>
+      </div>
+
+      <form id="form-redefinir" class="space-y-5">
+
+        <div>
+          <label for="nova-senha" class="block mb-2 font-semibold">Nova senha <span class="text-red-600">*</span></label>
+          <input type="password" id="nova-senha" required placeholder="Mínimo 8 caracteres"
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <div>
+          <label for="confirmar-senha" class="block mb-2 font-semibold">Confirmar senha <span class="text-red-600">*</span></label>
+          <input type="password" id="confirmar-senha" required placeholder="Repita a nova senha"
+            class="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+
+        <button type="submit" id="botao-enviar"
+          class="bg-blue-600 hover:bg-blue-700 transition text-white py-3 rounded-lg font-semibold w-full disabled:opacity-50">
+          Salvar nova senha
+        </button>
+
+      </form>
+
+      <div id="feedback-sucesso" class="hidden mt-6 bg-green-50 border border-green-200 rounded-lg p-4 text-center">
+        <p class="text-green-700 font-bold">✅ Senha redefinida com sucesso!</p>
+        <a href="login.html" class="inline-block mt-3 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold text-sm transition">
+          Fazer login
+        </a>
+      </div>
+
+      <div id="feedback-erro" class="hidden mt-4 bg-red-50 border border-red-200 rounded-lg p-4">
+        <p id="mensagem-erro" class="text-red-700 font-semibold"></p>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    // Lê o token da URL (?token=...)
+    const token = new URLSearchParams(window.location.search).get("token");
+
+    if (!token) {
+      document.getElementById("form-redefinir").classList.add("hidden");
+      document.getElementById("token-invalido").classList.remove("hidden");
+    }
+
+    document.getElementById("form-redefinir").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const novaSenha     = document.getElementById("nova-senha").value;
+      const confirmarSenha = document.getElementById("confirmar-senha").value;
+      const botao   = document.getElementById("botao-enviar");
+      const sucesso = document.getElementById("feedback-sucesso");
+      const erro    = document.getElementById("feedback-erro");
+      const msgErro = document.getElementById("mensagem-erro");
+
+      sucesso.classList.add("hidden");
+      erro.classList.add("hidden");
+
+      if (novaSenha !== confirmarSenha) {
+        msgErro.textContent = "❌ As senhas não coincidem.";
+        erro.classList.remove("hidden");
+        return;
+      }
+
+      if (novaSenha.length < 8) {
+        msgErro.textContent = "❌ A senha deve ter pelo menos 8 caracteres.";
+        erro.classList.remove("hidden");
+        return;
+      }
+
+      botao.disabled = true;
+      botao.textContent = "Salvando...";
+
+      try {
+        await apiFetch("/api/auth/redefinir-senha", {
+          method: "POST",
+          body: JSON.stringify({ token, novaSenha }),
+        });
+
+        document.getElementById("form-redefinir").classList.add("hidden");
+        sucesso.classList.remove("hidden");
+
+      } catch (er) {
+        if (er.message.includes("inválido") || er.message.includes("expirado")) {
+          document.getElementById("form-redefinir").classList.add("hidden");
+          document.getElementById("token-invalido").classList.remove("hidden");
+        } else {
+          msgErro.textContent = `❌ ${er.message}`;
+          erro.classList.remove("hidden");
+        }
+      } finally {
+        botao.disabled = false;
+        botao.textContent = "Salvar nova senha";
+      }
+    });
+  </script>
+
+</body>
+</html>
