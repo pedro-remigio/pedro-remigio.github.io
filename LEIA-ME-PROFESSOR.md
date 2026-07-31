@@ -102,7 +102,8 @@ Oxetech/                    ← raiz do projeto
     │   ├── server.js       ← entrada do servidor
     │   └── routes/
     │       ├── public.js   ← rotas da API pública (/api/*)
-    │       └── admin.js    ← rotas do painel admin (/admin/*)
+    │       ├── admin.js    ← rotas do painel admin (/admin/*)
+    │       └── pagamentos.js ← integração Mercado Pago (/api/pagamentos/*)
     ├── prisma/
     │   ├── schema.prisma   ← modelos do banco de dados
     │   ├── seed.js         ← dados iniciais (admin + eventos)
@@ -120,6 +121,7 @@ Oxetech/                    ← raiz do projeto
 - **Banco de dados:** PostgreSQL 17
 - **Servidor web:** nginx (proxy reverso + arquivos estáticos)
 - **Segurança:** bcrypt (custo 12), express-session, helmet, rate limiting
+- **Pagamentos:** Mercado Pago Checkout Pro + webhook HMAC-SHA256
 - **Containerização:** Docker + Docker Compose
 
 ---

@@ -16,13 +16,14 @@ Desenvolvida como Projeto Final Integrador da Oxetech Academy.
 | Campo | Valor |
 |-------|-------|
 | Email | admin@remigioeventos.com |
-| Senha | definida no `.env` do servidor |
+| Senha | Oxetech2026 |
 
 ## Funcionalidades
 
 - Listagem de eventos (ativos e encerrados) com filtro por status
-- Inscrição em eventos para usuários autenticados
-- Área do usuário com edição de perfil e solicitação de alteração de dados sensíveis
+- Inscrição em eventos para usuários autenticados (gratuitos e pagos)
+- **Pagamentos via Mercado Pago Checkout Pro** — inscrições pagas geram preferência de pagamento, webhook atualiza status automaticamente
+- Área do usuário com edição de perfil, inscrições e botão "Pagar agora" para pendentes
 - Formulário de contato persistido no banco de dados
 - Cadastro e login com senha criptografada (bcrypt custo 12) e sessão em cookie httpOnly
 - Redefinição de senha via token
@@ -60,6 +61,9 @@ Admin
 | POST | `/api/inscricoes` | Privado | Inscreve usuário em evento |
 | POST | `/api/usuarios/esqueci-senha` | Público | Solicita reset de senha |
 | POST | `/api/usuarios/redefinir-senha` | Público | Redefine senha via token |
+| POST | `/api/pagamentos/criar-preferencia` | Privado | Cria preferência de pagamento no Mercado Pago |
+| POST | `/api/pagamentos/webhook` | Público (MP) | Recebe notificação de pagamento do Mercado Pago |
+| GET | `/api/pagamentos/status/:id` | Privado | Consulta status da inscrição |
 | GET | `/admin/dashboard` | Admin | Painel administrativo |
 | GET | `/admin/eventos/:id/relatorio` | Admin | Relatório do evento |
 
@@ -76,6 +80,9 @@ ADMIN_EMAIL=admin@remigioeventos.com
 ADMIN_PASSWORD=senha-forte
 FRONTEND_URL=https://eventos.pedroremigio.com.br
 NODE_ENV=production
+MP_ACCESS_TOKEN=seu-token-do-mercado-pago
+MP_WEBHOOK_SECRET=sua-assinatura-secreta-do-webhook
+BACKEND_URL=https://apieventos.pedroremigio.com.br
 ```
 
 ## Infraestrutura de produção
@@ -136,12 +143,7 @@ npx serve -l 8080
 - Node.js 20, Express, EJS
 - Prisma ORM, PostgreSQL 17
 - bcryptjs, express-session, Helmet, CORS
+- Mercado Pago Checkout Pro (pagamentos + webhook)
 - Docker, Docker Compose, nginx
 - GitHub Pages (frontend), AWS EC2 (backend)
 - Domínio próprio + Let's Encrypt (SSL)
-
-## Próximos passos
-
-- Integração com Mercado Pago (inscrição paga no Campeonato de LoL)
-- Upload de imagens para eventos
-- Notificações por e-mail (confirmação de inscrição)
